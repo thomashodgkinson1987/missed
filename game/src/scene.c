@@ -1,14 +1,18 @@
+#include <string.h>
 #include "raylib.h"
 #include "scene.h"
 #include "array.h"
+#include "sprite.h"
 #include "button.h"
 
-struct scene scene_create(Texture2D background_texture)
+
+
+struct scene scene_create(void)
 {
     struct scene scene = (struct scene){ 0 };
 
     scene.elapsed_time = 0.0f;
-    scene.background_texture = background_texture;
+    scene.sprites = array_create(1, sizeof(struct sprite));
     scene.buttons = array_create(1, sizeof(struct button));
 
     return scene;
@@ -16,20 +20,30 @@ struct scene scene_create(Texture2D background_texture)
 
 void scene_init(struct scene * scene)
 {
+    array_init(&scene->sprites);
     array_init(&scene->buttons);
 }
 
 void scene_free(struct scene * scene)
 {
     scene->elapsed_time = 0.0f;
-    UnloadTexture(scene->background_texture);
+
+    for (int i = 0; i < array_get_count(&scene->sprites); ++i)
+    {
+        struct sprite * sprite = (struct sprite *)array_get(&scene->sprites, i);
+        sprite_free(sprite);
+    }
+    array_free(&scene->sprites);
+    scene->sprites = (struct array){ 0 };
+
     array_free(&scene->buttons);
+    scene->buttons = (struct array){ 0 };
 }
 
-void scene_reset(struct scene * scene, Texture2D background_texture)
+void scene_reset(struct scene * scene)
 {
     scene_free(scene);
-    *scene = scene_create(background_texture);
+    *scene = scene_create();
     scene_init(scene);
 }
 
@@ -40,9 +54,9 @@ float scene_get_elapsed_time(struct scene * scene)
     return scene->elapsed_time;
 }
 
-Texture2D scene_get_background_texture(struct scene * scene)
+struct array * scene_get_sprites(struct scene * scene)
 {
-    return scene->background_texture;
+    return &scene->sprites;
 }
 
 struct array * scene_get_buttons(struct scene * scene)
@@ -57,9 +71,9 @@ void scene_set_elapsed_time(struct scene * scene, float elapsed_time)
     scene->elapsed_time = elapsed_time;
 }
 
-void scene_set_background_texture(struct scene * scene, Texture2D background_texture)
+void scene_set_sprites(struct scene * scene, struct array sprites)
 {
-    scene->background_texture = background_texture;
+    scene->sprites = sprites;
 }
 
 void scene_set_buttons(struct scene * scene, struct array buttons)
@@ -72,6 +86,25 @@ void scene_set_buttons(struct scene * scene, struct array buttons)
 void scene_translate_elapsed_time(struct scene * scene, float delapsed_time)
 {
     scene->elapsed_time += delapsed_time;
+}
+
+
+
+void scene_add_sprite(struct scene * scene, int x, int y, char * texture_filename, Color tint, bool is_visible)
+{
+    struct sprite sprite = sprite_create(x, y, texture_filename, tint, is_visible);
+    sprite_init(&sprite);
+    array_append(&scene->sprites, &sprite);
+}
+
+struct sprite * scene_get_sprite(struct scene * scene, size_t index)
+{
+    return (struct sprite *)array_get(&scene->sprites, index);
+}
+
+size_t scene_get_sprites_count(struct scene * scene)
+{
+    return array_get_count(&scene->sprites);
 }
 
 
