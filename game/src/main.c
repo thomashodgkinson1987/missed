@@ -49,12 +49,14 @@ Color scene_transition_color;
 bool is_draw_debug;
 
 struct scene scene;
-void(*function_pointers_scene_init[7])(void);
-void(*function_pointers_scene_free[7])(void);
-void(*function_pointers_scene_enter[7])(void);
-void(*function_pointers_scene_exit[7])(void);
-void(*function_pointers_scene_update[7])(float delta);
-void(*function_pointers_scene_draw[7])(void);
+void(*function_pointers_scene_init[18])(void);
+void(*function_pointers_scene_free[18])(void);
+void(*function_pointers_scene_enter[18])(void);
+void(*function_pointers_scene_exit[18])(void);
+void(*function_pointers_scene_update[18])(float delta);
+void(*function_pointers_scene_draw[18])(void);
+
+RenderTexture2D render_texture;
 
 
 
@@ -71,185 +73,475 @@ void set_scene(int index);
 
 
 
-/* -------- scene_0 -------- */
+/* -------- scene_0000 -------- */
 
-struct sprite * scene_0_sprite_background;
+struct sprite * scene_0000_sprite_background;
 
-struct button * scene_0_button_exit;
+struct button * scene_0000_button_exit;
 
-void scene_0_init(void);
-void scene_0_free(void);
+void scene_0000_init(void);
+void scene_0000_free(void);
 
-void scene_0_enter(void);
-void scene_0_exit(void);
+void scene_0000_enter(void);
+void scene_0000_exit(void);
 
-void scene_0_update(float delta);
-void scene_0_draw(void);
+void scene_0000_update(float delta);
+void scene_0000_draw(void);
 
-void scene_0_on_button_0_pressed(void);
+void scene_0000_on_pressed_button_exit(void);
 
-/* -------- scene_0 -------- */
+/* -------- scene_0000 -------- */
 
 
 
-/* -------- scene_1 -------- */
+/* -------- scene_0001 -------- */
 
-struct sprite * scene_1_sprite_background;
+struct sprite * scene_0001_sprite_background;
 
-struct button * scene_1_button_exit_0;
-struct button * scene_1_button_exit_1;
-struct button * scene_1_button_exit_2;
+struct button * scene_0001_button_exit_0;
+struct button * scene_0001_button_exit_1;
+struct button * scene_0001_button_exit_2;
 
-void scene_1_init(void);
-void scene_1_free(void);
+void scene_0001_init(void);
+void scene_0001_free(void);
 
-void scene_1_enter(void);
-void scene_1_exit(void);
+void scene_0001_enter(void);
+void scene_0001_exit(void);
 
-void scene_1_update(float delta);
-void scene_1_draw(void);
+void scene_0001_update(float delta);
+void scene_0001_draw(void);
 
-void scene_1_on_button_0_pressed(void);
-void scene_1_on_button_1_pressed(void);
-void scene_1_on_button_2_pressed(void);
+void scene_0001_on_pressed_button_exit_0(void);
+void scene_0001_on_pressed_button_exit_1(void);
+void scene_0001_on_pressed_button_exit_2(void);
 
-/* -------- scene_1 -------- */
+/* -------- scene_0001 -------- */
 
 
 
-/* -------- scene_2 -------- */
+/* -------- scene_0002 -------- */
 
-struct sprite * scene_2_sprite_background;
+struct sprite * scene_0002_sprite_background;
 
-struct button * scene_2_button_exit_0;
-struct button * scene_2_button_exit_1;
+struct button * scene_0002_button_exit_0;
+struct button * scene_0002_button_exit_1;
 
-void scene_2_init(void);
-void scene_2_free(void);
+void scene_0002_init(void);
+void scene_0002_free(void);
 
-void scene_2_enter(void);
-void scene_2_exit(void);
+void scene_0002_enter(void);
+void scene_0002_exit(void);
 
-void scene_2_update(float delta);
-void scene_2_draw(void);
+void scene_0002_update(float delta);
+void scene_0002_draw(void);
 
-void scene_2_on_button_0_pressed(void);
-void scene_2_on_button_1_pressed(void);
+void scene_0002_on_pressed_button_exit_0(void);
+void scene_0002_on_pressed_button_exit_1(void);
 
-/* -------- scene_2 -------- */
+/* -------- scene_0002 -------- */
 
 
 
-/* -------- scene_3 -------- */
+/* -------- scene_0003 -------- */
 
-struct sprite * scene_3_sprite_background;
+struct sprite * scene_0003_sprite_background;
 
-struct button * scene_3_button_exit_0;
-struct button * scene_3_button_exit_1;
+struct button * scene_0003_button_exit_0;
+struct button * scene_0003_button_exit_1;
 
-void scene_3_init(void);
-void scene_3_free(void);
+void scene_0003_init(void);
+void scene_0003_free(void);
 
-void scene_3_enter(void);
-void scene_3_exit(void);
+void scene_0003_enter(void);
+void scene_0003_exit(void);
 
-void scene_3_update(float delta);
-void scene_3_draw(void);
+void scene_0003_update(float delta);
+void scene_0003_draw(void);
 
-void scene_3_on_button_0_pressed(void);
-void scene_3_on_button_1_pressed(void);
+void scene_0003_on_pressed_button_exit_0(void);
+void scene_0003_on_pressed_button_exit_1(void);
 
-/* -------- scene_3 -------- */
+/* -------- scene_0003 -------- */
 
 
 
-/* -------- scene_4 -------- */
+/* -------- scene_0004 -------- */
 
-struct sprite * scene_4_sprite_background;
+struct sprite * scene_0004_sprite_background;
 
-struct button * scene_4_button_exit_0;
-struct button * scene_4_button_exit_1;
+struct button * scene_0004_button_exit_0;
+struct button * scene_0004_button_exit_1;
 
-void scene_4_init(void);
-void scene_4_free(void);
+void scene_0004_init(void);
+void scene_0004_free(void);
 
-void scene_4_enter(void);
-void scene_4_exit(void);
+void scene_0004_enter(void);
+void scene_0004_exit(void);
 
-void scene_4_update(float delta);
-void scene_4_draw(void);
+void scene_0004_update(float delta);
+void scene_0004_draw(void);
 
-void scene_4_on_button_0_pressed(void);
-void scene_4_on_button_1_pressed(void);
+void scene_0004_on_pressed_button_exit_0(void);
+void scene_0004_on_pressed_button_exit_1(void);
 
-/* -------- scene_4 -------- */
+/* -------- scene_0004 -------- */
 
 
 
-/* -------- scene_5 -------- */
+/* -------- scene_0005 -------- */
 
-struct sprite * scene_5_sprite_background;
-struct sprite * scene_5_sprite_lever_down;
-struct sprite * scene_5_sprite_lever_up;
+struct sprite * scene_0005_sprite_background;
+struct sprite * scene_0005_sprite_lever_down;
+struct sprite * scene_0005_sprite_lever_up;
 
-struct button * scene_5_button_lever;
-struct button * scene_5_button_exit_0;
-struct button * scene_5_button_exit_1;
+struct button * scene_0005_button_lever;
+struct button * scene_0005_button_exit_0;
+struct button * scene_0005_button_exit_1;
 
-bool scene_5_is_lever_down;
+Sound scene_0005_sound_lever;
 
-void scene_5_init(void);
-void scene_5_free(void);
+bool scene_0005_is_lever_down;
 
-void scene_5_enter(void);
-void scene_5_exit(void);
+void scene_0005_init(void);
+void scene_0005_free(void);
 
-void scene_5_update(float delta);
-void scene_5_draw(void);
+void scene_0005_enter(void);
+void scene_0005_exit(void);
 
-void scene_5_on_button_0_pressed(void);
-void scene_5_on_button_1_pressed(void);
-void scene_5_on_button_2_pressed(void);
+void scene_0005_update(float delta);
+void scene_0005_draw(void);
 
-/* -------- scene_5 -------- */
+void scene_0005_on_pressed_button_lever(void);
+void scene_0005_on_pressed_button_exit_0(void);
+void scene_0005_on_pressed_button_exit_1(void);
 
+/* -------- scene_0005 -------- */
 
 
-/* -------- scene_6 -------- */
 
-struct sprite * scene_6_sprite_background;
+/* -------- scene_0006 -------- */
 
-struct button * scene_6_button_exit_0;
-struct button * scene_6_button_exit_1;
-struct button * scene_6_button_exit_2;
+struct sprite * scene_0006_sprite_background;
 
-void scene_6_init(void);
-void scene_6_free(void);
+struct button * scene_0006_button_exit_0;
+struct button * scene_0006_button_exit_1;
+struct button * scene_0006_button_exit_2;
 
-void scene_6_enter(void);
-void scene_6_exit(void);
+void scene_0006_init(void);
+void scene_0006_free(void);
 
-void scene_6_update(float delta);
-void scene_6_draw(void);
+void scene_0006_enter(void);
+void scene_0006_exit(void);
 
-void scene_6_on_button_0_pressed(void);
-void scene_6_on_button_1_pressed(void);
-void scene_6_on_button_2_pressed(void);
+void scene_0006_update(float delta);
+void scene_0006_draw(void);
 
-/* -------- scene_6 -------- */
+void scene_0006_on_pressed_button_exit_0(void);
+void scene_0006_on_pressed_button_exit_1(void);
+void scene_0006_on_pressed_button_exit_2(void);
+
+/* -------- scene_0006 -------- */
+
+
+
+/* -------- scene_0007 -------- */
+
+struct sprite * scene_0007_sprite_background;
+
+struct button * scene_0007_button_exit_0;
+struct button * scene_0007_button_exit_1;
+
+void scene_0007_init(void);
+void scene_0007_free(void);
+
+void scene_0007_enter(void);
+void scene_0007_exit(void);
+
+void scene_0007_update(float delta);
+void scene_0007_draw(void);
+
+void scene_0007_on_pressed_button_exit_0(void);
+void scene_0007_on_pressed_button_exit_1(void);
+
+/* -------- scene_0007 -------- */
+
+
+
+/* -------- scene_0008 -------- */
+
+struct sprite * scene_0008_sprite_background;
+
+struct button * scene_0008_button_exit_0;
+struct button * scene_0008_button_exit_1;
+struct button * scene_0008_button_exit_2;
+
+void scene_0008_init(void);
+void scene_0008_free(void);
+
+void scene_0008_enter(void);
+void scene_0008_exit(void);
+
+void scene_0008_update(float delta);
+void scene_0008_draw(void);
+
+void scene_0008_on_pressed_button_exit_0(void);
+void scene_0008_on_pressed_button_exit_1(void);
+void scene_0008_on_pressed_button_exit_2(void);
+
+/* -------- scene_0008 -------- */
+
+
+
+/* -------- scene_0009 -------- */
+
+struct sprite * scene_0009_sprite_background;
+
+struct button * scene_0009_button_exit_0;
+struct button * scene_0009_button_exit_1;
+struct button * scene_0009_button_exit_2;
+
+void scene_0009_init(void);
+void scene_0009_free(void);
+
+void scene_0009_enter(void);
+void scene_0009_exit(void);
+
+void scene_0009_update(float delta);
+void scene_0009_draw(void);
+
+void scene_0009_on_pressed_button_exit_0(void);
+void scene_0009_on_pressed_button_exit_1(void);
+void scene_0009_on_pressed_button_exit_2(void);
+
+/* -------- scene_0009 -------- */
+
+
+
+/* -------- scene_0010 -------- */
+
+struct sprite * scene_0010_sprite_background;
+
+struct button * scene_0010_button_exit_0;
+struct button * scene_0010_button_exit_1;
+struct button * scene_0010_button_exit_2;
+struct button * scene_0010_button_exit_3;
+
+void scene_0010_init(void);
+void scene_0010_free(void);
+
+void scene_0010_enter(void);
+void scene_0010_exit(void);
+
+void scene_0010_update(float delta);
+void scene_0010_draw(void);
+
+void scene_0010_on_pressed_button_exit_0(void);
+void scene_0010_on_pressed_button_exit_1(void);
+void scene_0010_on_pressed_button_exit_2(void);
+void scene_0010_on_pressed_button_exit_3(void);
+
+/* -------- scene_0010 -------- */
+
+
+
+/* -------- scene_0011 -------- */
+
+struct sprite * scene_0011_sprite_background;
+
+struct button * scene_0011_button_exit_0;
+struct button * scene_0011_button_exit_1;
+struct button * scene_0011_button_exit_2;
+
+void scene_0011_init(void);
+void scene_0011_free(void);
+
+void scene_0011_enter(void);
+void scene_0011_exit(void);
+
+void scene_0011_update(float delta);
+void scene_0011_draw(void);
+
+void scene_0011_on_pressed_button_exit_0(void);
+void scene_0011_on_pressed_button_exit_1(void);
+void scene_0011_on_pressed_button_exit_2(void);
+
+/* -------- scene_0011 -------- */
+
+
+
+/* -------- scene_0012 -------- */
+
+struct sprite * scene_0012_sprite_background;
+
+struct button * scene_0012_button_exit_0;
+struct button * scene_0012_button_exit_1;
+struct button * scene_0012_button_exit_2;
+
+void scene_0012_init(void);
+void scene_0012_free(void);
+
+void scene_0012_enter(void);
+void scene_0012_exit(void);
+
+void scene_0012_update(float delta);
+void scene_0012_draw(void);
+
+void scene_0012_on_pressed_button_exit_0(void);
+void scene_0012_on_pressed_button_exit_1(void);
+void scene_0012_on_pressed_button_exit_2(void);
+
+/* -------- scene_0012 -------- */
+
+
+
+/* -------- scene_0013 -------- */
+
+struct sprite * scene_0013_sprite_background;
+
+struct button * scene_0013_button_exit_0;
+struct button * scene_0013_button_exit_1;
+struct button * scene_0013_button_exit_2;
+
+void scene_0013_init(void);
+void scene_0013_free(void);
+
+void scene_0013_enter(void);
+void scene_0013_exit(void);
+
+void scene_0013_update(float delta);
+void scene_0013_draw(void);
+
+void scene_0013_on_pressed_button_exit_0(void);
+void scene_0013_on_pressed_button_exit_1(void);
+void scene_0013_on_pressed_button_exit_2(void);
+
+/* -------- scene_0013 -------- */
+
+
+
+/* -------- scene_0014 -------- */
+
+struct sprite * scene_0014_sprite_background;
+
+struct button * scene_0014_button_exit_0;
+struct button * scene_0014_button_exit_1;
+struct button * scene_0014_button_exit_2;
+
+void scene_0014_init(void);
+void scene_0014_free(void);
+
+void scene_0014_enter(void);
+void scene_0014_exit(void);
+
+void scene_0014_update(float delta);
+void scene_0014_draw(void);
+
+void scene_0014_on_pressed_button_exit_0(void);
+void scene_0014_on_pressed_button_exit_1(void);
+void scene_0014_on_pressed_button_exit_2(void);
+
+/* -------- scene_0014 -------- */
+
+
+
+/* -------- scene_0015 -------- */
+
+struct sprite * scene_0015_sprite_background;
+struct sprite * scene_0015_sprite_lever_down;
+struct sprite * scene_0015_sprite_lever_up;
+
+struct button * scene_0015_button_lever;
+struct button * scene_0015_button_exit_0;
+struct button * scene_0015_button_exit_1;
+
+Sound scene_0015_sound_lever;
+
+bool scene_0015_is_lever_down;
+
+void scene_0015_init(void);
+void scene_0015_free(void);
+
+void scene_0015_enter(void);
+void scene_0015_exit(void);
+
+void scene_0015_update(float delta);
+void scene_0015_draw(void);
+
+void scene_0015_on_pressed_button_lever(void);
+void scene_0015_on_pressed_button_exit_0(void);
+void scene_0015_on_pressed_button_exit_1(void);
+
+/* -------- scene_0015 -------- */
+
+
+
+/* -------- scene_0016 -------- */
+
+struct sprite * scene_0016_sprite_background;
+
+struct button * scene_0016_button_exit_0;
+struct button * scene_0016_button_exit_1;
+struct button * scene_0016_button_exit_2;
+
+void scene_0016_init(void);
+void scene_0016_free(void);
+
+void scene_0016_enter(void);
+void scene_0016_exit(void);
+
+void scene_0016_update(float delta);
+void scene_0016_draw(void);
+
+void scene_0016_on_pressed_button_exit_0(void);
+void scene_0016_on_pressed_button_exit_1(void);
+void scene_0016_on_pressed_button_exit_2(void);
+
+/* -------- scene_0016 -------- */
+
+
+
+/* -------- scene_0017 -------- */
+
+struct sprite * scene_0017_sprite_background;
+
+struct button * scene_0017_button_exit_0;
+struct button * scene_0017_button_exit_1;
+struct button * scene_0017_button_exit_2;
+
+void scene_0017_init(void);
+void scene_0017_free(void);
+
+void scene_0017_enter(void);
+void scene_0017_exit(void);
+
+void scene_0017_update(float delta);
+void scene_0017_draw(void);
+
+void scene_0017_on_pressed_button_exit_0(void);
+void scene_0017_on_pressed_button_exit_1(void);
+void scene_0017_on_pressed_button_exit_2(void);
+
+/* -------- scene_0017 -------- */
 
 
 
 int main(void)
 {
+    SetConfigFlags(FLAG_WINDOW_RESIZABLE);
     InitWindow(544, 332, "Missed");
+    InitAudioDevice();
     SetTargetFPS(60);
     HideCursor();
+
+    //Music music = LoadMusicStream("resources/music_0000.ogg");
+    //PlayMusicStream(music);
 
     game_init();
 
     while (!WindowShouldClose())
     {
+        //UpdateMusicStream(music);
+
         float delta = GetFrameTime();
         game_update(delta);
         game_draw();
@@ -257,6 +549,9 @@ int main(void)
 
     game_free();
 
+    //UnloadMusicStream(music);
+
+    CloseAudioDevice();
     CloseWindow();
 
     return 0;
@@ -276,18 +571,18 @@ void game_init(void)
     is_mouse_input_enabled = false;
     is_draw_mouse = true;
 
-    mouse_cursor_textures[0] = LoadTexture("resources/mouse_cursor_0000.png");
-    mouse_cursor_textures[1] = LoadTexture("resources/mouse_cursor_0001.png");
-    mouse_cursor_textures[2] = LoadTexture("resources/mouse_cursor_0002.png");
-    mouse_cursor_textures[3] = LoadTexture("resources/mouse_cursor_0003.png");
-    mouse_cursor_textures[4] = LoadTexture("resources/mouse_cursor_0004.png");
-    mouse_cursor_offsets[0] = (Vector2){ -8.0f, -2.0f };
+    mouse_cursor_textures[0] = LoadTexture("resources/mouse_cursor/0000.png");
+    mouse_cursor_textures[1] = LoadTexture("resources/mouse_cursor/0001.png");
+    mouse_cursor_textures[2] = LoadTexture("resources/mouse_cursor/0002.png");
+    mouse_cursor_textures[3] = LoadTexture("resources/mouse_cursor/0003.png");
+    mouse_cursor_textures[4] = LoadTexture("resources/mouse_cursor/0004.png");
+    mouse_cursor_offsets[0] = (Vector2){ -2.0f, -8.0f };
     mouse_cursor_offsets[1] = (Vector2){ -8.0f, -2.0f };
     mouse_cursor_offsets[2] = (Vector2){ -15.0f, -8.0f };
-    mouse_cursor_offsets[3] = (Vector2){ -2.0f, -8.0f };
-    mouse_cursor_offsets[4] = (Vector2){ -8.0f, -15.0f };
+    mouse_cursor_offsets[3] = (Vector2){ -8.0f, -15.0f };
+    mouse_cursor_offsets[4] = (Vector2){ -8.0f, -2.0f };
 
-    current_mouse_cursor_index = 0;
+    current_mouse_cursor_index = 1;
 
     current_scene_index = -1;
     next_scene_index = 0;
@@ -302,55 +597,135 @@ void game_init(void)
 
     scene = (struct scene){ 0 };
 
-    function_pointers_scene_init[0] = scene_0_init;
-    function_pointers_scene_init[1] = scene_1_init;
-    function_pointers_scene_init[2] = scene_2_init;
-    function_pointers_scene_init[3] = scene_3_init;
-    function_pointers_scene_init[4] = scene_4_init;
-    function_pointers_scene_init[5] = scene_5_init;
-    function_pointers_scene_init[6] = scene_6_init;
+    function_pointers_scene_init[0] = scene_0000_init;
+    function_pointers_scene_free[0] = scene_0000_free;
+    function_pointers_scene_enter[0] = scene_0000_enter;
+    function_pointers_scene_exit[0] = scene_0000_exit;
+    function_pointers_scene_update[0] = scene_0000_update;
+    function_pointers_scene_draw[0] = scene_0000_draw;
 
-    function_pointers_scene_free[0] = scene_0_free;
-    function_pointers_scene_free[1] = scene_1_free;
-    function_pointers_scene_free[2] = scene_2_free;
-    function_pointers_scene_free[3] = scene_3_free;
-    function_pointers_scene_free[4] = scene_4_free;
-    function_pointers_scene_free[5] = scene_5_free;
-    function_pointers_scene_free[6] = scene_6_free;
+    function_pointers_scene_init[1] = scene_0001_init;
+    function_pointers_scene_free[1] = scene_0001_free;
+    function_pointers_scene_enter[1] = scene_0001_enter;
+    function_pointers_scene_exit[1] = scene_0001_exit;
+    function_pointers_scene_update[1] = scene_0001_update;
+    function_pointers_scene_draw[1] = scene_0001_draw;
 
-    function_pointers_scene_enter[0] = scene_0_enter;
-    function_pointers_scene_enter[1] = scene_1_enter;
-    function_pointers_scene_enter[2] = scene_2_enter;
-    function_pointers_scene_enter[3] = scene_3_enter;
-    function_pointers_scene_enter[4] = scene_4_enter;
-    function_pointers_scene_enter[5] = scene_5_enter;
-    function_pointers_scene_enter[6] = scene_6_enter;
+    function_pointers_scene_init[2] = scene_0002_init;
+    function_pointers_scene_free[2] = scene_0002_free;
+    function_pointers_scene_enter[2] = scene_0002_enter;
+    function_pointers_scene_exit[2] = scene_0002_exit;
+    function_pointers_scene_update[2] = scene_0002_update;
+    function_pointers_scene_draw[2] = scene_0002_draw;
 
-    function_pointers_scene_exit[0] = scene_0_exit;
-    function_pointers_scene_exit[1] = scene_1_exit;
-    function_pointers_scene_exit[2] = scene_2_exit;
-    function_pointers_scene_exit[3] = scene_3_exit;
-    function_pointers_scene_exit[4] = scene_4_exit;
-    function_pointers_scene_exit[5] = scene_5_exit;
-    function_pointers_scene_exit[6] = scene_6_exit;
+    function_pointers_scene_init[3] = scene_0003_init;
+    function_pointers_scene_free[3] = scene_0003_free;
+    function_pointers_scene_enter[3] = scene_0003_enter;
+    function_pointers_scene_exit[3] = scene_0003_exit;
+    function_pointers_scene_update[3] = scene_0003_update;
+    function_pointers_scene_draw[3] = scene_0003_draw;
 
-    function_pointers_scene_update[0] = scene_0_update;
-    function_pointers_scene_update[1] = scene_1_update;
-    function_pointers_scene_update[2] = scene_2_update;
-    function_pointers_scene_update[3] = scene_3_update;
-    function_pointers_scene_update[4] = scene_4_update;
-    function_pointers_scene_update[5] = scene_5_update;
-    function_pointers_scene_update[6] = scene_6_update;
+    function_pointers_scene_init[4] = scene_0004_init;
+    function_pointers_scene_free[4] = scene_0004_free;
+    function_pointers_scene_enter[4] = scene_0004_enter;
+    function_pointers_scene_exit[4] = scene_0004_exit;
+    function_pointers_scene_update[4] = scene_0004_update;
+    function_pointers_scene_draw[4] = scene_0004_draw;
 
-    function_pointers_scene_draw[0] = scene_0_draw;
-    function_pointers_scene_draw[1] = scene_1_draw;
-    function_pointers_scene_draw[2] = scene_2_draw;
-    function_pointers_scene_draw[3] = scene_3_draw;
-    function_pointers_scene_draw[4] = scene_4_draw;
-    function_pointers_scene_draw[5] = scene_5_draw;
-    function_pointers_scene_draw[6] = scene_6_draw;
+    function_pointers_scene_init[5] = scene_0005_init;
+    function_pointers_scene_free[5] = scene_0005_free;
+    function_pointers_scene_enter[5] = scene_0005_enter;
+    function_pointers_scene_exit[5] = scene_0005_exit;
+    function_pointers_scene_update[5] = scene_0005_update;
+    function_pointers_scene_draw[5] = scene_0005_draw;
+
+    function_pointers_scene_init[6] = scene_0006_init;
+    function_pointers_scene_free[6] = scene_0006_free;
+    function_pointers_scene_enter[6] = scene_0006_enter;
+    function_pointers_scene_exit[6] = scene_0006_exit;
+    function_pointers_scene_update[6] = scene_0006_update;
+    function_pointers_scene_draw[6] = scene_0006_draw;
+
+    function_pointers_scene_init[7] = scene_0007_init;
+    function_pointers_scene_free[7] = scene_0007_free;
+    function_pointers_scene_enter[7] = scene_0007_enter;
+    function_pointers_scene_exit[7] = scene_0007_exit;
+    function_pointers_scene_update[7] = scene_0007_update;
+    function_pointers_scene_draw[7] = scene_0007_draw;
+
+    function_pointers_scene_init[8] = scene_0008_init;
+    function_pointers_scene_free[8] = scene_0008_free;
+    function_pointers_scene_enter[8] = scene_0008_enter;
+    function_pointers_scene_exit[8] = scene_0008_exit;
+    function_pointers_scene_update[8] = scene_0008_update;
+    function_pointers_scene_draw[8] = scene_0008_draw;
+
+    function_pointers_scene_init[9] = scene_0009_init;
+    function_pointers_scene_free[9] = scene_0009_free;
+    function_pointers_scene_enter[9] = scene_0009_enter;
+    function_pointers_scene_exit[9] = scene_0009_exit;
+    function_pointers_scene_update[9] = scene_0009_update;
+    function_pointers_scene_draw[9] = scene_0009_draw;
+
+    function_pointers_scene_init[10] = scene_0010_init;
+    function_pointers_scene_free[10] = scene_0010_free;
+    function_pointers_scene_enter[10] = scene_0010_enter;
+    function_pointers_scene_exit[10] = scene_0010_exit;
+    function_pointers_scene_update[10] = scene_0010_update;
+    function_pointers_scene_draw[10] = scene_0010_draw;
+
+    function_pointers_scene_init[11] = scene_0011_init;
+    function_pointers_scene_free[11] = scene_0011_free;
+    function_pointers_scene_enter[11] = scene_0011_enter;
+    function_pointers_scene_exit[11] = scene_0011_exit;
+    function_pointers_scene_update[11] = scene_0011_update;
+    function_pointers_scene_draw[11] = scene_0011_draw;
+
+    function_pointers_scene_init[12] = scene_0012_init;
+    function_pointers_scene_free[12] = scene_0012_free;
+    function_pointers_scene_enter[12] = scene_0012_enter;
+    function_pointers_scene_exit[12] = scene_0012_exit;
+    function_pointers_scene_update[12] = scene_0012_update;
+    function_pointers_scene_draw[12] = scene_0012_draw;
+
+    function_pointers_scene_init[13] = scene_0013_init;
+    function_pointers_scene_free[13] = scene_0013_free;
+    function_pointers_scene_enter[13] = scene_0013_enter;
+    function_pointers_scene_exit[13] = scene_0013_exit;
+    function_pointers_scene_update[13] = scene_0013_update;
+    function_pointers_scene_draw[13] = scene_0013_draw;
+
+    function_pointers_scene_init[14] = scene_0014_init;
+    function_pointers_scene_free[14] = scene_0014_free;
+    function_pointers_scene_enter[14] = scene_0014_enter;
+    function_pointers_scene_exit[14] = scene_0014_exit;
+    function_pointers_scene_update[14] = scene_0014_update;
+    function_pointers_scene_draw[14] = scene_0014_draw;
+
+    function_pointers_scene_init[15] = scene_0015_init;
+    function_pointers_scene_free[15] = scene_0015_free;
+    function_pointers_scene_enter[15] = scene_0015_enter;
+    function_pointers_scene_exit[15] = scene_0015_exit;
+    function_pointers_scene_update[15] = scene_0015_update;
+    function_pointers_scene_draw[15] = scene_0015_draw;
+
+    function_pointers_scene_init[16] = scene_0016_init;
+    function_pointers_scene_free[16] = scene_0016_free;
+    function_pointers_scene_enter[16] = scene_0016_enter;
+    function_pointers_scene_exit[16] = scene_0016_exit;
+    function_pointers_scene_update[16] = scene_0016_update;
+    function_pointers_scene_draw[16] = scene_0016_draw;
+
+    function_pointers_scene_init[17] = scene_0017_init;
+    function_pointers_scene_free[17] = scene_0017_free;
+    function_pointers_scene_enter[17] = scene_0017_enter;
+    function_pointers_scene_exit[17] = scene_0017_exit;
+    function_pointers_scene_update[17] = scene_0017_update;
+    function_pointers_scene_draw[17] = scene_0017_draw;
 
     is_draw_debug = true;
+
+    render_texture = LoadRenderTexture(544, 332);
 }
 void game_free(void)
 {
@@ -393,52 +768,130 @@ void game_free(void)
     scene = (struct scene){ 0 };
 
     function_pointers_scene_init[0] = NULL;
-    function_pointers_scene_init[1] = NULL;
-    function_pointers_scene_init[2] = NULL;
-    function_pointers_scene_init[3] = NULL;
-    function_pointers_scene_init[4] = NULL;
-    function_pointers_scene_init[5] = NULL;
-    function_pointers_scene_init[6] = NULL;
-
     function_pointers_scene_free[0] = NULL;
-    function_pointers_scene_free[1] = NULL;
-    function_pointers_scene_free[2] = NULL;
-    function_pointers_scene_free[3] = NULL;
-    function_pointers_scene_free[4] = NULL;
-    function_pointers_scene_free[5] = NULL;
-    function_pointers_scene_free[6] = NULL;
-
     function_pointers_scene_enter[0] = NULL;
-    function_pointers_scene_enter[1] = NULL;
-    function_pointers_scene_enter[2] = NULL;
-    function_pointers_scene_enter[3] = NULL;
-    function_pointers_scene_enter[4] = NULL;
-    function_pointers_scene_enter[5] = NULL;
-    function_pointers_scene_enter[6] = NULL;
-
     function_pointers_scene_exit[0] = NULL;
-    function_pointers_scene_exit[1] = NULL;
-    function_pointers_scene_exit[2] = NULL;
-    function_pointers_scene_exit[3] = NULL;
-    function_pointers_scene_exit[4] = NULL;
-    function_pointers_scene_exit[5] = NULL;
-    function_pointers_scene_exit[6] = NULL;
-
     function_pointers_scene_update[0] = NULL;
-    function_pointers_scene_update[1] = NULL;
-    function_pointers_scene_update[2] = NULL;
-    function_pointers_scene_update[3] = NULL;
-    function_pointers_scene_update[4] = NULL;
-    function_pointers_scene_update[5] = NULL;
-    function_pointers_scene_update[6] = NULL;
-
     function_pointers_scene_draw[0] = NULL;
+
+    function_pointers_scene_init[1] = NULL;
+    function_pointers_scene_free[1] = NULL;
+    function_pointers_scene_enter[1] = NULL;
+    function_pointers_scene_exit[1] = NULL;
+    function_pointers_scene_update[1] = NULL;
     function_pointers_scene_draw[1] = NULL;
+
+    function_pointers_scene_init[2] = NULL;
+    function_pointers_scene_free[2] = NULL;
+    function_pointers_scene_enter[2] = NULL;
+    function_pointers_scene_exit[2] = NULL;
+    function_pointers_scene_update[2] = NULL;
     function_pointers_scene_draw[2] = NULL;
+
+    function_pointers_scene_init[3] = NULL;
+    function_pointers_scene_free[3] = NULL;
+    function_pointers_scene_enter[3] = NULL;
+    function_pointers_scene_exit[3] = NULL;
+    function_pointers_scene_update[3] = NULL;
     function_pointers_scene_draw[3] = NULL;
+
+    function_pointers_scene_init[4] = NULL;
+    function_pointers_scene_free[4] = NULL;
+    function_pointers_scene_enter[4] = NULL;
+    function_pointers_scene_exit[4] = NULL;
+    function_pointers_scene_update[4] = NULL;
     function_pointers_scene_draw[4] = NULL;
+
+    function_pointers_scene_init[5] = NULL;
+    function_pointers_scene_free[5] = NULL;
+    function_pointers_scene_enter[5] = NULL;
+    function_pointers_scene_exit[5] = NULL;
+    function_pointers_scene_update[5] = NULL;
     function_pointers_scene_draw[5] = NULL;
+
+    function_pointers_scene_init[6] = NULL;
+    function_pointers_scene_free[6] = NULL;
+    function_pointers_scene_enter[6] = NULL;
+    function_pointers_scene_exit[6] = NULL;
+    function_pointers_scene_update[6] = NULL;
     function_pointers_scene_draw[6] = NULL;
+
+    function_pointers_scene_init[7] = NULL;
+    function_pointers_scene_free[7] = NULL;
+    function_pointers_scene_enter[7] = NULL;
+    function_pointers_scene_exit[7] = NULL;
+    function_pointers_scene_update[7] = NULL;
+    function_pointers_scene_draw[7] = NULL;
+
+    function_pointers_scene_init[8] = NULL;
+    function_pointers_scene_free[8] = NULL;
+    function_pointers_scene_enter[8] = NULL;
+    function_pointers_scene_exit[8] = NULL;
+    function_pointers_scene_update[8] = NULL;
+    function_pointers_scene_draw[8] = NULL;
+
+    function_pointers_scene_init[9] = NULL;
+    function_pointers_scene_free[9] = NULL;
+    function_pointers_scene_enter[9] = NULL;
+    function_pointers_scene_exit[9] = NULL;
+    function_pointers_scene_update[9] = NULL;
+    function_pointers_scene_draw[9] = NULL;
+
+    function_pointers_scene_init[10] = NULL;
+    function_pointers_scene_free[10] = NULL;
+    function_pointers_scene_enter[10] = NULL;
+    function_pointers_scene_exit[10] = NULL;
+    function_pointers_scene_update[10] = NULL;
+    function_pointers_scene_draw[10] = NULL;
+
+    function_pointers_scene_init[11] = NULL;
+    function_pointers_scene_free[11] = NULL;
+    function_pointers_scene_enter[11] = NULL;
+    function_pointers_scene_exit[11] = NULL;
+    function_pointers_scene_update[11] = NULL;
+    function_pointers_scene_draw[11] = NULL;
+
+    function_pointers_scene_init[12] = NULL;
+    function_pointers_scene_free[12] = NULL;
+    function_pointers_scene_enter[12] = NULL;
+    function_pointers_scene_exit[12] = NULL;
+    function_pointers_scene_update[12] = NULL;
+    function_pointers_scene_draw[12] = NULL;
+
+    function_pointers_scene_init[13] = NULL;
+    function_pointers_scene_free[13] = NULL;
+    function_pointers_scene_enter[13] = NULL;
+    function_pointers_scene_exit[13] = NULL;
+    function_pointers_scene_update[13] = NULL;
+    function_pointers_scene_draw[13] = NULL;
+
+    function_pointers_scene_init[14] = NULL;
+    function_pointers_scene_free[14] = NULL;
+    function_pointers_scene_enter[14] = NULL;
+    function_pointers_scene_exit[14] = NULL;
+    function_pointers_scene_update[14] = NULL;
+    function_pointers_scene_draw[14] = NULL;
+
+    function_pointers_scene_init[15] = NULL;
+    function_pointers_scene_free[15] = NULL;
+    function_pointers_scene_enter[15] = NULL;
+    function_pointers_scene_exit[15] = NULL;
+    function_pointers_scene_update[15] = NULL;
+    function_pointers_scene_draw[15] = NULL;
+
+    function_pointers_scene_init[16] = NULL;
+    function_pointers_scene_free[16] = NULL;
+    function_pointers_scene_enter[16] = NULL;
+    function_pointers_scene_exit[16] = NULL;
+    function_pointers_scene_update[16] = NULL;
+    function_pointers_scene_draw[16] = NULL;
+
+    function_pointers_scene_init[17] = NULL;
+    function_pointers_scene_free[17] = NULL;
+    function_pointers_scene_enter[17] = NULL;
+    function_pointers_scene_exit[17] = NULL;
+    function_pointers_scene_update[17] = NULL;
+    function_pointers_scene_draw[17] = NULL;
 
     is_draw_debug = false;
 }
@@ -540,7 +993,7 @@ void game_update(float delta)
     {
         scene_translate_elapsed_time(&scene, delta);
 
-        current_mouse_cursor_index = 0;
+        current_mouse_cursor_index = 1;
 
         if (is_mouse_input_enabled)
         {
@@ -575,9 +1028,9 @@ void game_update(float delta)
 }
 void game_draw(void)
 {
-    BeginDrawing();
+    BeginTextureMode(render_texture);
 
-    ClearBackground(WHITE);
+    ClearBackground((Color) { 255, 0, 255, 255 });
 
     if (current_scene_index != -1)
     {
@@ -616,6 +1069,17 @@ void game_draw(void)
         DrawText(TextFormat("current_scene_index: %d", current_scene_index), 8, 8, 8, WHITE);
     }
 
+    EndTextureMode();
+
+    BeginDrawing();
+
+    ClearBackground(BLACK);
+
+    Rectangle source = (Rectangle){ 0.0f, 0.0f, (float)render_texture.texture.width, -(float)render_texture.texture.height };
+    Rectangle dest = (Rectangle){ 0.0f, 0.0f, (float)GetScreenWidth(), (float)GetScreenHeight() };
+
+    DrawTexturePro(render_texture.texture, source, dest, (Vector2) { 0.0f, 0.0f }, 0.0f, WHITE);
+
     EndDrawing();
 }
 
@@ -633,370 +1097,997 @@ void set_scene(int index)
 
 
 
-/* -------- scene_0 -------- */
+/* -------- scene_0000 -------- */
 
-void scene_0_init(void)
+void scene_0000_init(void)
 {
-    scene_0_sprite_background = scene_add_sprite(&scene, 0, 0, "resources/scene_0/background.png", WHITE, true);
+    scene_0000_sprite_background = scene_add_sprite(&scene, 0, 0, "resources/scene_0000/background.png", WHITE, true);
 
-    scene_0_button_exit = scene_add_button(&scene, 312, 70, 129, 89, BLANK, true, 1, scene_0_on_button_0_pressed);
+    scene_0000_button_exit = scene_add_button(&scene, 312, 70, 129, 89, BLANK, true, 4, scene_0000_on_pressed_button_exit);
 }
-void scene_0_free(void)
+void scene_0000_free(void)
 {
-    scene_0_sprite_background = NULL;
+    scene_0000_sprite_background = NULL;
 
-    scene_0_button_exit = NULL;
+    scene_0000_button_exit = NULL;
 }
 
-void scene_0_enter(void)
-{
-
-}
-void scene_0_exit(void)
+void scene_0000_enter(void)
 {
 
 }
-
-void scene_0_update(float delta)
-{
-
-}
-void scene_0_draw(void)
+void scene_0000_exit(void)
 {
 
 }
 
-void scene_0_on_button_0_pressed(void)
+void scene_0000_update(float delta)
+{
+
+}
+void scene_0000_draw(void)
+{
+
+}
+
+void scene_0000_on_pressed_button_exit(void)
 {
     set_scene(1);
 }
 
-/* -------- scene_0 -------- */
+/* -------- scene_0000 -------- */
 
 
 
-/* -------- scene_1 -------- */
+/* -------- scene_0001 -------- */
 
-void scene_1_init(void)
+void scene_0001_init(void)
 {
-    scene_1_sprite_background = scene_add_sprite(&scene, 0, 0, "resources/scene_1/background.png", WHITE, true);
+    scene_0001_sprite_background = scene_add_sprite(&scene, 0, 0, "resources/scene_0001/background.png", WHITE, true);
 
-    scene_1_button_exit_0 = scene_add_button(&scene, 0, 0, 142, 332, BLANK, true, 3, scene_1_on_button_0_pressed);
-    scene_1_button_exit_1 = scene_add_button(&scene, 142, 0, 260, 332, BLANK, true, 0, scene_1_on_button_1_pressed);
-    scene_1_button_exit_2 = scene_add_button(&scene, 402, 0, 142, 332, BLANK, true, 2, scene_1_on_button_2_pressed);
+    scene_0001_button_exit_0 = scene_add_button(&scene, 0, 0, 142, 332, BLANK, true, 0, scene_0001_on_pressed_button_exit_0);
+    scene_0001_button_exit_1 = scene_add_button(&scene, 142, 0, 260, 332, BLANK, true, 1, scene_0001_on_pressed_button_exit_1);
+    scene_0001_button_exit_2 = scene_add_button(&scene, 402, 0, 142, 332, BLANK, true, 2, scene_0001_on_pressed_button_exit_2);
 }
-void scene_1_free(void)
+void scene_0001_free(void)
 {
-    scene_1_sprite_background = NULL;
+    scene_0001_sprite_background = NULL;
 
-    scene_1_button_exit_0 = NULL;
-    scene_1_button_exit_1 = NULL;
-    scene_1_button_exit_2 = NULL;
+    scene_0001_button_exit_0 = NULL;
+    scene_0001_button_exit_1 = NULL;
+    scene_0001_button_exit_2 = NULL;
 }
 
-void scene_1_enter(void)
-{
-
-}
-void scene_1_exit(void)
+void scene_0001_enter(void)
 {
 
 }
-
-void scene_1_update(float delta)
-{
-
-}
-void scene_1_draw(void)
+void scene_0001_exit(void)
 {
 
 }
 
-void scene_1_on_button_0_pressed(void)
+void scene_0001_update(float delta)
+{
+
+}
+void scene_0001_draw(void)
+{
+
+}
+
+void scene_0001_on_pressed_button_exit_0(void)
 {
     set_scene(4);
 }
-void scene_1_on_button_1_pressed(void)
+void scene_0001_on_pressed_button_exit_1(void)
 {
     set_scene(5);
 }
-void scene_1_on_button_2_pressed(void)
+void scene_0001_on_pressed_button_exit_2(void)
 {
     set_scene(2);
 }
 
-/* -------- scene_1 -------- */
+/* -------- scene_0001 -------- */
 
 
 
-/* -------- scene_2 -------- */
+/* -------- scene_0002 -------- */
 
-void scene_2_init(void)
+void scene_0002_init(void)
 {
-    scene_2_sprite_background = scene_add_sprite(&scene, 0, 0, "resources/scene_2/background.png", WHITE, true);
+    scene_0002_sprite_background = scene_add_sprite(&scene, 0, 0, "resources/scene_0002/background.png", WHITE, true);
 
-    scene_2_button_exit_0 = scene_add_button(&scene, 0, 0, 142, 332, BLANK, true, 3, scene_2_on_button_0_pressed);
-    scene_2_button_exit_1 = scene_add_button(&scene, 402, 0, 142, 332, BLANK, true, 2, scene_2_on_button_1_pressed);
+    scene_0002_button_exit_0 = scene_add_button(&scene, 0, 0, 142, 332, BLANK, true, 0, scene_0002_on_pressed_button_exit_0);
+    scene_0002_button_exit_1 = scene_add_button(&scene, 402, 0, 142, 332, BLANK, true, 2, scene_0002_on_pressed_button_exit_1);
 }
-void scene_2_free(void)
+void scene_0002_free(void)
 {
-    scene_2_sprite_background = NULL;
+    scene_0002_sprite_background = NULL;
 
-    scene_2_button_exit_0 = NULL;
-    scene_2_button_exit_1 = NULL;
+    scene_0002_button_exit_0 = NULL;
+    scene_0002_button_exit_1 = NULL;
 }
 
-void scene_2_enter(void)
-{
-
-}
-void scene_2_exit(void)
+void scene_0002_enter(void)
 {
 
 }
-
-void scene_2_update(float delta)
-{
-
-}
-void scene_2_draw(void)
+void scene_0002_exit(void)
 {
 
 }
 
-void scene_2_on_button_0_pressed(void)
+void scene_0002_update(float delta)
+{
+
+}
+void scene_0002_draw(void)
+{
+
+}
+
+void scene_0002_on_pressed_button_exit_0(void)
 {
     set_scene(1);
 }
-void scene_2_on_button_1_pressed(void)
+void scene_0002_on_pressed_button_exit_1(void)
 {
     set_scene(3);
 }
 
-/* -------- scene_2 -------- */
+/* -------- scene_0002 -------- */
 
 
 
-/* -------- scene_3 -------- */
+/* -------- scene_0003 -------- */
 
-void scene_3_init(void)
+void scene_0003_init(void)
 {
-    scene_3_sprite_background = scene_add_sprite(&scene, 0, 0, "resources/scene_3/background.png", WHITE, true);
+    scene_0003_sprite_background = scene_add_sprite(&scene, 0, 0, "resources/scene_0003/background.png", WHITE, true);
 
-    scene_3_button_exit_0 = scene_add_button(&scene, 0, 0, 142, 332, BLANK, true, 3, scene_3_on_button_0_pressed);
-    scene_3_button_exit_1 = scene_add_button(&scene, 402, 0, 142, 332, BLANK, true, 2, scene_3_on_button_1_pressed);
+    scene_0003_button_exit_0 = scene_add_button(&scene, 0, 0, 142, 332, BLANK, true, 0, scene_0003_on_pressed_button_exit_0);
+    scene_0003_button_exit_1 = scene_add_button(&scene, 402, 0, 142, 332, BLANK, true, 2, scene_0003_on_pressed_button_exit_1);
 }
-void scene_3_free(void)
+void scene_0003_free(void)
 {
-    scene_3_sprite_background = NULL;
+    scene_0003_sprite_background = NULL;
 
-    scene_3_button_exit_0 = NULL;
-    scene_3_button_exit_1 = NULL;
+    scene_0003_button_exit_0 = NULL;
+    scene_0003_button_exit_1 = NULL;
 }
 
-void scene_3_enter(void)
-{
-
-}
-void scene_3_exit(void)
+void scene_0003_enter(void)
 {
 
 }
-
-void scene_3_update(float delta)
-{
-
-}
-void scene_3_draw(void)
+void scene_0003_exit(void)
 {
 
 }
 
-void scene_3_on_button_0_pressed(void)
+void scene_0003_update(float delta)
+{
+
+}
+void scene_0003_draw(void)
+{
+
+}
+
+void scene_0003_on_pressed_button_exit_0(void)
 {
     set_scene(2);
 }
-void scene_3_on_button_1_pressed(void)
+void scene_0003_on_pressed_button_exit_1(void)
 {
     set_scene(4);
 }
 
-/* -------- scene_3 -------- */
+/* -------- scene_0003 -------- */
 
 
 
-/* -------- scene_4 -------- */
+/* -------- scene_0004 -------- */
 
-void scene_4_init(void)
+void scene_0004_init(void)
 {
-    scene_4_sprite_background = scene_add_sprite(&scene, 0, 0, "resources/scene_4/background.png", WHITE, true);
+    scene_0004_sprite_background = scene_add_sprite(&scene, 0, 0, "resources/scene_0004/background.png", WHITE, true);
 
-    scene_4_button_exit_0 = scene_add_button(&scene, 0, 0, 142, 332, BLANK, true, 3, scene_4_on_button_0_pressed);
-    scene_4_button_exit_1 = scene_add_button(&scene, 402, 0, 142, 332, BLANK, true, 2, scene_4_on_button_1_pressed);
+    scene_0004_button_exit_0 = scene_add_button(&scene, 0, 0, 142, 332, BLANK, true, 0, scene_0004_on_pressed_button_exit_0);
+    scene_0004_button_exit_1 = scene_add_button(&scene, 402, 0, 142, 332, BLANK, true, 2, scene_0004_on_pressed_button_exit_1);
 }
-void scene_4_free(void)
+void scene_0004_free(void)
 {
-    scene_4_sprite_background = NULL;
+    scene_0004_sprite_background = NULL;
 
-    scene_4_button_exit_0 = NULL;
-    scene_4_button_exit_1 = NULL;
+    scene_0004_button_exit_0 = NULL;
+    scene_0004_button_exit_1 = NULL;
 }
 
-void scene_4_enter(void)
-{
-
-}
-void scene_4_exit(void)
+void scene_0004_enter(void)
 {
 
 }
-
-void scene_4_update(float delta)
-{
-
-}
-void scene_4_draw(void)
+void scene_0004_exit(void)
 {
 
 }
 
-void scene_4_on_button_0_pressed(void)
+void scene_0004_update(float delta)
+{
+
+}
+void scene_0004_draw(void)
+{
+
+}
+
+void scene_0004_on_pressed_button_exit_0(void)
 {
     set_scene(3);
 }
-void scene_4_on_button_1_pressed(void)
+void scene_0004_on_pressed_button_exit_1(void)
 {
     set_scene(1);
 }
 
-/* -------- scene_4 -------- */
+/* -------- scene_0004 -------- */
 
 
 
-/* -------- scene_5 -------- */
+/* -------- scene_0005 -------- */
 
-void scene_5_init(void)
+void scene_0005_init(void)
 {
-    scene_5_sprite_background = scene_add_sprite(&scene, 0, 0, "resources/scene_5/background.png", WHITE, true);
-    scene_5_sprite_lever_down = scene_add_sprite(&scene, 352, 183, "resources/scene_5/lever_down.png", WHITE, true);
-    scene_5_sprite_lever_up = scene_add_sprite(&scene, 352, 183, "resources/scene_5/lever_up.png", WHITE, true);
+    scene_0005_sprite_background = scene_add_sprite(&scene, 0, 0, "resources/scene_0005/background.png", WHITE, true);
+    scene_0005_sprite_lever_down = scene_add_sprite(&scene, 352, 183, "resources/scene_0005/lever_down.png", WHITE, true);
+    scene_0005_sprite_lever_up = scene_add_sprite(&scene, 352, 183, "resources/scene_0005/lever_up.png", WHITE, true);
 
-    scene_5_button_lever = scene_add_button(&scene, 352, 183, 39, 41, BLANK, true, 1, scene_5_on_button_0_pressed);
-    scene_5_button_exit_0 = scene_add_button(&scene, 0, 0, 402, 332, BLANK, true, 0, scene_5_on_button_1_pressed);
-    scene_5_button_exit_1 = scene_add_button(&scene, 402, 0, 142, 332, BLANK, true, 2, scene_5_on_button_2_pressed);
+    scene_0005_button_lever = scene_add_button(&scene, 352, 183, 39, 41, BLANK, true, 4, scene_0005_on_pressed_button_lever);
+    scene_0005_button_exit_0 = scene_add_button(&scene, 0, 0, 402, 332, BLANK, true, 1, scene_0005_on_pressed_button_exit_0);
+    scene_0005_button_exit_1 = scene_add_button(&scene, 402, 0, 142, 332, BLANK, true, 2, scene_0005_on_pressed_button_exit_1);
 
-    scene_5_is_lever_down = true;
+    scene_0005_sound_lever = LoadSound("resources/scene_0005/lever.ogg");
 
-    if (!game_data_has_bool(&game_data, "scene_5_is_lever_down"))
+    scene_0005_is_lever_down = true;
+
+    if (!game_data_has_bool(&game_data, "scene_0005_is_lever_down"))
     {
-        game_data_add_bool(&game_data, "scene_5_is_lever_down", scene_5_is_lever_down);
+        game_data_add_bool(&game_data, "scene_0005_is_lever_down", scene_0005_is_lever_down);
     }
     else
     {
-        scene_5_is_lever_down = game_data_get_bool(&game_data, "scene_5_is_lever_down");
+        scene_0005_is_lever_down = game_data_get_bool(&game_data, "scene_0005_is_lever_down");
     }
 }
-void scene_5_free(void)
+void scene_0005_free(void)
 {
-    scene_5_sprite_background = NULL;
-    scene_5_sprite_lever_down = NULL;
-    scene_5_sprite_lever_up = NULL;
+    scene_0005_sprite_background = NULL;
+    scene_0005_sprite_lever_down = NULL;
+    scene_0005_sprite_lever_up = NULL;
 
-    scene_5_button_lever = NULL;
-    scene_5_button_exit_0 = NULL;
-    scene_5_button_exit_1 = NULL;
+    scene_0005_button_lever = NULL;
+    scene_0005_button_exit_0 = NULL;
+    scene_0005_button_exit_1 = NULL;
 
-    scene_5_is_lever_down = false;
+    UnloadSound(scene_0005_sound_lever);
+
+    scene_0005_is_lever_down = false;
 }
 
-void scene_5_enter(void)
+void scene_0005_enter(void)
 {
-    sprite_set_is_visible(scene_5_sprite_lever_down, scene_5_is_lever_down);
-    sprite_set_is_visible(scene_5_sprite_lever_up, !scene_5_is_lever_down);
+    sprite_set_is_visible(scene_0005_sprite_lever_down, scene_0005_is_lever_down);
+    sprite_set_is_visible(scene_0005_sprite_lever_up, !scene_0005_is_lever_down);
 }
-void scene_5_exit(void)
-{
-
-}
-
-void scene_5_update(float delta)
-{
-
-}
-void scene_5_draw(void)
+void scene_0005_exit(void)
 {
 
 }
 
-void scene_5_on_button_0_pressed(void)
-{
-    scene_5_is_lever_down = !scene_5_is_lever_down;
-    game_data_set_bool(&game_data, "scene_5_is_lever_down", scene_5_is_lever_down);
-
-    sprite_set_is_visible(scene_5_sprite_lever_down, scene_5_is_lever_down);
-    sprite_set_is_visible(scene_5_sprite_lever_up, !scene_5_is_lever_down);
-}
-void scene_5_on_button_1_pressed(void)
+void scene_0005_update(float delta)
 {
 
 }
-void scene_5_on_button_2_pressed(void)
+void scene_0005_draw(void)
+{
+
+}
+
+void scene_0005_on_pressed_button_lever(void)
+{
+    PlaySound(scene_0005_sound_lever);
+
+    scene_0005_is_lever_down = !scene_0005_is_lever_down;
+    game_data_set_bool(&game_data, "scene_0005_is_lever_down", scene_0005_is_lever_down);
+
+    sprite_set_is_visible(scene_0005_sprite_lever_down, scene_0005_is_lever_down);
+    sprite_set_is_visible(scene_0005_sprite_lever_up, !scene_0005_is_lever_down);
+}
+void scene_0005_on_pressed_button_exit_0(void)
+{
+    set_scene(7);
+}
+void scene_0005_on_pressed_button_exit_1(void)
 {
     set_scene(6);
 }
 
-/* -------- scene_5 -------- */
+/* -------- scene_0005 -------- */
 
 
 
-/* -------- scene_6 -------- */
+/* -------- scene_0006 -------- */
 
-void scene_6_init(void)
+void scene_0006_init(void)
 {
-    scene_6_sprite_background = scene_add_sprite(&scene, 0, 0, "resources/scene_6/background.png", WHITE, true);
+    scene_0006_sprite_background = scene_add_sprite(&scene, 0, 0, "resources/scene_0006/background.png", WHITE, true);
 
-    scene_6_button_exit_0 = scene_add_button(&scene, 0, 0, 142, 332, BLANK, true, 3, scene_6_on_button_0_pressed);
-    scene_6_button_exit_1 = scene_add_button(&scene, 142, 0, 402, 332, BLANK, true, 0, scene_6_on_button_1_pressed);
-    scene_6_button_exit_2 = scene_add_button(&scene, 402, 0, 142, 332, BLANK, true, 2, scene_6_on_button_2_pressed);
+    scene_0006_button_exit_0 = scene_add_button(&scene, 0, 0, 142, 332, BLANK, true, 0, scene_0006_on_pressed_button_exit_0);
+    scene_0006_button_exit_1 = scene_add_button(&scene, 142, 0, 260, 332, BLANK, true, 1, scene_0006_on_pressed_button_exit_1);
+    scene_0006_button_exit_2 = scene_add_button(&scene, 402, 0, 142, 332, BLANK, true, 2, scene_0006_on_pressed_button_exit_2);
 }
-void scene_6_free(void)
+void scene_0006_free(void)
 {
-    scene_6_sprite_background = NULL;
+    scene_0006_sprite_background = NULL;
 
-    scene_6_button_exit_0 = NULL;
-    scene_6_button_exit_1 = NULL;
-    scene_6_button_exit_2 = NULL;
+    scene_0006_button_exit_0 = NULL;
+    scene_0006_button_exit_1 = NULL;
+    scene_0006_button_exit_2 = NULL;
 }
 
-void scene_6_enter(void)
-{
-
-}
-void scene_6_exit(void)
+void scene_0006_enter(void)
 {
 
 }
-
-void scene_6_update(float delta)
-{
-
-}
-void scene_6_draw(void)
+void scene_0006_exit(void)
 {
 
 }
 
-void scene_6_on_button_0_pressed(void)
+void scene_0006_update(float delta)
+{
+
+}
+void scene_0006_draw(void)
+{
+
+}
+
+void scene_0006_on_pressed_button_exit_0(void)
 {
     set_scene(5);
 }
-void scene_6_on_button_1_pressed(void)
+void scene_0006_on_pressed_button_exit_1(void)
 {
     set_scene(3);
 }
-void scene_6_on_button_2_pressed(void)
+void scene_0006_on_pressed_button_exit_2(void)
 {
     set_scene(5);
 }
 
-/* -------- scene_6 -------- */
+/* -------- scene_0006 -------- */
+
+
+
+/* -------- scene_0007 -------- */
+
+void scene_0007_init(void)
+{
+    scene_0007_sprite_background = scene_add_sprite(&scene, 0, 0, "resources/scene_0007/background.png", WHITE, true);
+
+    scene_0007_button_exit_0 = scene_add_button(&scene, 0, 0, 402, 332, BLANK, true, 1, scene_0007_on_pressed_button_exit_0);
+    scene_0007_button_exit_1 = scene_add_button(&scene, 402, 0, 142, 332, BLANK, true, 2, scene_0007_on_pressed_button_exit_1);
+}
+void scene_0007_free(void)
+{
+    scene_0007_sprite_background = NULL;
+
+    scene_0007_button_exit_0 = NULL;
+    scene_0007_button_exit_1 = NULL;
+}
+
+void scene_0007_enter(void)
+{
+
+}
+void scene_0007_exit(void)
+{
+
+}
+
+void scene_0007_update(float delta)
+{
+
+}
+void scene_0007_draw(void)
+{
+
+}
+
+void scene_0007_on_pressed_button_exit_0(void)
+{
+    set_scene(8);
+}
+void scene_0007_on_pressed_button_exit_1(void)
+{
+    set_scene(9);
+}
+
+/* -------- scene_0007 -------- */
+
+
+
+/* -------- scene_0008 -------- */
+
+void scene_0008_init(void)
+{
+    scene_0008_sprite_background = scene_add_sprite(&scene, 0, 0, "resources/scene_0008/background.png", WHITE, true);
+
+    scene_0008_button_exit_0 = scene_add_button(&scene, 0, 0, 142, 332, BLANK, true, 0, scene_0008_on_pressed_button_exit_0);
+    scene_0008_button_exit_1 = scene_add_button(&scene, 142, 0, 260, 332, BLANK, true, 1, scene_0008_on_pressed_button_exit_1);
+    scene_0008_button_exit_2 = scene_add_button(&scene, 402, 0, 142, 332, BLANK, true, 2, scene_0008_on_pressed_button_exit_2);
+}
+void scene_0008_free(void)
+{
+    scene_0008_sprite_background = NULL;
+
+    scene_0008_button_exit_0 = NULL;
+    scene_0008_button_exit_1 = NULL;
+    scene_0008_button_exit_2 = NULL;
+}
+
+void scene_0008_enter(void)
+{
+
+}
+void scene_0008_exit(void)
+{
+
+}
+
+void scene_0008_update(float delta)
+{
+
+}
+void scene_0008_draw(void)
+{
+
+}
+
+void scene_0008_on_pressed_button_exit_0(void)
+{
+    set_scene(10);
+}
+void scene_0008_on_pressed_button_exit_1(void)
+{
+
+}
+void scene_0008_on_pressed_button_exit_2(void)
+{
+    set_scene(10);
+}
+
+/* -------- scene_0008 -------- */
+
+
+
+/* -------- scene_0009 -------- */
+
+void scene_0009_init(void)
+{
+    scene_0009_sprite_background = scene_add_sprite(&scene, 0, 0, "resources/scene_0009/background.png", WHITE, true);
+
+    scene_0009_button_exit_0 = scene_add_button(&scene, 0, 0, 142, 332, BLANK, true, 0, scene_0009_on_pressed_button_exit_0);
+    scene_0009_button_exit_1 = scene_add_button(&scene, 142, 0, 260, 332, BLANK, true, 1, scene_0009_on_pressed_button_exit_1);
+    scene_0009_button_exit_2 = scene_add_button(&scene, 402, 0, 142, 332, BLANK, true, 2, scene_0009_on_pressed_button_exit_2);
+}
+void scene_0009_free(void)
+{
+    scene_0009_sprite_background = NULL;
+
+    scene_0009_button_exit_0 = NULL;
+    scene_0009_button_exit_1 = NULL;
+    scene_0009_button_exit_2 = NULL;
+}
+
+void scene_0009_enter(void)
+{
+
+}
+void scene_0009_exit(void)
+{
+
+}
+
+void scene_0009_update(float delta)
+{
+
+}
+void scene_0009_draw(void)
+{
+
+}
+
+void scene_0009_on_pressed_button_exit_0(void)
+{
+    set_scene(12);
+}
+void scene_0009_on_pressed_button_exit_1(void)
+{
+    set_scene(13);
+}
+void scene_0009_on_pressed_button_exit_2(void)
+{
+    set_scene(12);
+}
+
+/* -------- scene_0009 -------- */
+
+
+
+/* -------- scene_0010 -------- */
+
+void scene_0010_init(void)
+{
+    scene_0010_sprite_background = scene_add_sprite(&scene, 0, 0, "resources/scene_0010/background.png", WHITE, true);
+
+    scene_0010_button_exit_0 = scene_add_button(&scene, 0, 0, 142, 332, BLANK, true, 0, scene_0010_on_pressed_button_exit_0);
+    scene_0010_button_exit_1 = scene_add_button(&scene, 142, 0, 260, 332, BLANK, true, 1, scene_0010_on_pressed_button_exit_1);
+    scene_0010_button_exit_2 = scene_add_button(&scene, 402, 0, 142, 166, BLANK, true, 2, scene_0010_on_pressed_button_exit_2);
+    scene_0010_button_exit_3 = scene_add_button(&scene, 402, 166, 142, 166, BLANK, true, 3, scene_0010_on_pressed_button_exit_3);
+}
+void scene_0010_free(void)
+{
+    scene_0010_sprite_background = NULL;
+
+    scene_0010_button_exit_0 = NULL;
+    scene_0010_button_exit_1 = NULL;
+    scene_0010_button_exit_2 = NULL;
+}
+
+void scene_0010_enter(void)
+{
+
+}
+void scene_0010_exit(void)
+{
+
+}
+
+void scene_0010_update(float delta)
+{
+
+}
+void scene_0010_draw(void)
+{
+
+}
+
+void scene_0010_on_pressed_button_exit_0(void)
+{
+    set_scene(8);
+}
+void scene_0010_on_pressed_button_exit_1(void)
+{
+    set_scene(9);
+}
+void scene_0010_on_pressed_button_exit_2(void)
+{
+    set_scene(8);
+}
+void scene_0010_on_pressed_button_exit_3(void)
+{
+    set_scene(11);
+}
+
+/* -------- scene_0010 -------- */
+
+
+
+/* -------- scene_0011 -------- */
+
+void scene_0011_init(void)
+{
+    scene_0011_sprite_background = scene_add_sprite(&scene, 0, 0, "resources/scene_0011/background.png", WHITE, true);
+
+    scene_0011_button_exit_0 = scene_add_button(&scene, 0, 0, 142, 332, BLANK, true, 0, scene_0011_on_pressed_button_exit_0);
+    scene_0011_button_exit_1 = scene_add_button(&scene, 142, 0, 260, 332, BLANK, true, 1, scene_0011_on_pressed_button_exit_1);
+    scene_0011_button_exit_2 = scene_add_button(&scene, 402, 0, 142, 332, BLANK, true, 2, scene_0011_on_pressed_button_exit_2);
+}
+void scene_0011_free(void)
+{
+    scene_0011_sprite_background = NULL;
+
+    scene_0011_button_exit_0 = NULL;
+    scene_0011_button_exit_1 = NULL;
+    scene_0011_button_exit_2 = NULL;
+}
+
+void scene_0011_enter(void)
+{
+
+}
+void scene_0011_exit(void)
+{
+
+}
+
+void scene_0011_update(float delta)
+{
+
+}
+void scene_0011_draw(void)
+{
+
+}
+
+void scene_0011_on_pressed_button_exit_0(void)
+{
+    set_scene(9);
+}
+void scene_0011_on_pressed_button_exit_1(void)
+{
+    set_scene(6);
+}
+void scene_0011_on_pressed_button_exit_2(void)
+{
+    set_scene(8);
+}
+
+/* -------- scene_0011 -------- */
+
+
+
+/* -------- scene_0012 -------- */
+
+void scene_0012_init(void)
+{
+    scene_0012_sprite_background = scene_add_sprite(&scene, 0, 0, "resources/scene_0012/background.png", WHITE, true);
+
+    scene_0012_button_exit_0 = scene_add_button(&scene, 0, 0, 142, 332, BLANK, true, 0, scene_0012_on_pressed_button_exit_0);
+    scene_0012_button_exit_1 = scene_add_button(&scene, 142, 0, 260, 332, BLANK, true, 1, scene_0012_on_pressed_button_exit_1);
+    scene_0012_button_exit_2 = scene_add_button(&scene, 402, 0, 142, 332, BLANK, true, 2, scene_0012_on_pressed_button_exit_2);
+}
+void scene_0012_free(void)
+{
+    scene_0012_sprite_background = NULL;
+
+    scene_0012_button_exit_0 = NULL;
+    scene_0012_button_exit_1 = NULL;
+    scene_0012_button_exit_2 = NULL;
+}
+
+void scene_0012_enter(void)
+{
+
+}
+void scene_0012_exit(void)
+{
+
+}
+
+void scene_0012_update(float delta)
+{
+
+}
+void scene_0012_draw(void)
+{
+
+}
+
+void scene_0012_on_pressed_button_exit_0(void)
+{
+    set_scene(9);
+}
+void scene_0012_on_pressed_button_exit_1(void)
+{
+    set_scene(8);
+}
+void scene_0012_on_pressed_button_exit_2(void)
+{
+    set_scene(9);
+}
+
+/* -------- scene_0012 -------- */
+
+
+
+/* -------- scene_0013 -------- */
+
+void scene_0013_init(void)
+{
+    scene_0013_sprite_background = scene_add_sprite(&scene, 0, 0, "resources/scene_0013/background.png", WHITE, true);
+
+    scene_0013_button_exit_0 = scene_add_button(&scene, 0, 0, 142, 332, BLANK, true, 0, scene_0013_on_pressed_button_exit_0);
+    scene_0013_button_exit_1 = scene_add_button(&scene, 142, 0, 260, 332, BLANK, true, 1, scene_0013_on_pressed_button_exit_1);
+    scene_0013_button_exit_2 = scene_add_button(&scene, 402, 0, 142, 332, BLANK, true, 2, scene_0013_on_pressed_button_exit_2);
+}
+void scene_0013_free(void)
+{
+    scene_0013_sprite_background = NULL;
+
+    scene_0013_button_exit_0 = NULL;
+    scene_0013_button_exit_1 = NULL;
+    scene_0013_button_exit_2 = NULL;
+}
+
+void scene_0013_enter(void)
+{
+
+}
+void scene_0013_exit(void)
+{
+
+}
+
+void scene_0013_update(float delta)
+{
+
+}
+void scene_0013_draw(void)
+{
+
+}
+
+void scene_0013_on_pressed_button_exit_0(void)
+{
+    set_scene(14);
+}
+void scene_0013_on_pressed_button_exit_1(void)
+{
+    set_scene(15);
+}
+void scene_0013_on_pressed_button_exit_2(void)
+{
+    set_scene(14);
+}
+
+/* -------- scene_0013 -------- */
+
+
+
+/* -------- scene_0014 -------- */
+
+void scene_0014_init(void)
+{
+    scene_0014_sprite_background = scene_add_sprite(&scene, 0, 0, "resources/scene_0014/background.png", WHITE, true);
+
+    scene_0014_button_exit_0 = scene_add_button(&scene, 0, 0, 142, 332, BLANK, true, 0, scene_0014_on_pressed_button_exit_0);
+    scene_0014_button_exit_1 = scene_add_button(&scene, 142, 0, 260, 332, BLANK, true, 1, scene_0014_on_pressed_button_exit_1);
+    scene_0014_button_exit_2 = scene_add_button(&scene, 402, 0, 142, 332, BLANK, true, 2, scene_0014_on_pressed_button_exit_2);
+}
+void scene_0014_free(void)
+{
+    scene_0014_sprite_background = NULL;
+
+    scene_0014_button_exit_0 = NULL;
+    scene_0014_button_exit_1 = NULL;
+    scene_0014_button_exit_2 = NULL;
+}
+
+void scene_0014_enter(void)
+{
+
+}
+void scene_0014_exit(void)
+{
+
+}
+
+void scene_0014_update(float delta)
+{
+
+}
+void scene_0014_draw(void)
+{
+
+}
+
+void scene_0014_on_pressed_button_exit_0(void)
+{
+    set_scene(13);
+}
+void scene_0014_on_pressed_button_exit_1(void)
+{
+    set_scene(12);
+}
+void scene_0014_on_pressed_button_exit_2(void)
+{
+    set_scene(13);
+}
+
+/* -------- scene_0014 -------- */
+
+
+
+/* -------- scene_0015 -------- */
+
+void scene_0015_init(void)
+{
+    scene_0015_sprite_background = scene_add_sprite(&scene, 0, 0, "resources/scene_0015/background.png", WHITE, true);
+    scene_0015_sprite_lever_down = scene_add_sprite(&scene, 38, 192, "resources/scene_0015/lever_down.png", WHITE, true);
+    scene_0015_sprite_lever_up = scene_add_sprite(&scene, 38, 192, "resources/scene_0015/lever_up.png", WHITE, true);
+
+    scene_0015_button_lever = scene_add_button(&scene, 38, 192, 99, 73, BLANK, true, 4, scene_0015_on_pressed_button_lever);
+    scene_0015_button_exit_0 = scene_add_button(&scene, 0, 0, 142, 332, BLANK, true, 0, scene_0015_on_pressed_button_exit_0);
+    scene_0015_button_exit_1 = scene_add_button(&scene, 402, 0, 142, 332, BLANK, true, 2, scene_0015_on_pressed_button_exit_1);
+
+    scene_0015_sound_lever = LoadSound("resources/scene_0015/lever.ogg");
+
+    scene_0015_is_lever_down = true;
+
+    if (!game_data_has_bool(&game_data, "scene_0015_is_lever_down"))
+    {
+        game_data_add_bool(&game_data, "scene_0015_is_lever_down", true);
+    }
+    else
+    {
+        scene_0015_is_lever_down = game_data_get_bool(&game_data, "scene_0015_is_lever_down");
+    }
+}
+void scene_0015_free(void)
+{
+    scene_0015_sprite_background = NULL;
+    scene_0015_sprite_lever_down = NULL;
+    scene_0015_sprite_lever_up = NULL;
+
+    scene_0015_button_lever = NULL;
+    scene_0015_button_exit_0 = NULL;
+    scene_0015_button_exit_1 = NULL;
+
+    UnloadSound(scene_0015_sound_lever);
+
+    scene_0015_is_lever_down = false;
+}
+
+void scene_0015_enter(void)
+{
+    sprite_set_is_visible(scene_0015_sprite_lever_down, scene_0015_is_lever_down);
+    sprite_set_is_visible(scene_0015_sprite_lever_up, !scene_0015_is_lever_down);
+}
+void scene_0015_exit(void)
+{
+
+}
+
+void scene_0015_update(float delta)
+{
+
+}
+void scene_0015_draw(void)
+{
+
+}
+
+void scene_0015_on_pressed_button_lever(void)
+{
+    PlaySound(scene_0015_sound_lever);
+
+    scene_0015_is_lever_down = !scene_0015_is_lever_down;
+    game_data_set_bool(&game_data, "scene_0015_is_lever_down", scene_0015_is_lever_down);
+
+    sprite_set_is_visible(scene_0015_sprite_lever_down, scene_0015_is_lever_down);
+    sprite_set_is_visible(scene_0015_sprite_lever_up, !scene_0015_is_lever_down);
+}
+void scene_0015_on_pressed_button_exit_0(void)
+{
+    set_scene(17);
+}
+void scene_0015_on_pressed_button_exit_1(void)
+{
+    set_scene(16);
+}
+
+/* -------- scene_0015 -------- */
+
+
+
+/* -------- scene_0016 -------- */
+
+void scene_0016_init(void)
+{
+    scene_0016_sprite_background = scene_add_sprite(&scene, 0, 0, "resources/scene_0016/background.png", WHITE, true);
+
+    scene_0016_button_exit_0 = scene_add_button(&scene, 0, 0, 142, 332, BLANK, true, 0, scene_0016_on_pressed_button_exit_0);
+    scene_0016_button_exit_1 = scene_add_button(&scene, 142, 0, 260, 332, BLANK, true, 1, scene_0016_on_pressed_button_exit_1);
+    scene_0016_button_exit_2 = scene_add_button(&scene, 402, 0, 142, 332, BLANK, true, 2, scene_0016_on_pressed_button_exit_2);
+}
+void scene_0016_free(void)
+{
+    scene_0016_sprite_background = NULL;
+
+    scene_0016_button_exit_0 = NULL;
+    scene_0016_button_exit_1 = NULL;
+    scene_0016_button_exit_2 = NULL;
+}
+
+void scene_0016_enter(void)
+{
+
+}
+void scene_0016_exit(void)
+{
+
+}
+
+void scene_0016_update(float delta)
+{
+
+}
+void scene_0016_draw(void)
+{
+
+}
+
+void scene_0016_on_pressed_button_exit_0(void)
+{
+    set_scene(15);
+}
+void scene_0016_on_pressed_button_exit_1(void)
+{
+    set_scene(14);
+}
+void scene_0016_on_pressed_button_exit_2(void)
+{
+    set_scene(17);
+}
+
+/* -------- scene_0016 -------- */
+
+
+
+/* -------- scene_0017 -------- */
+
+void scene_0017_init(void)
+{
+    scene_0017_sprite_background = scene_add_sprite(&scene, 0, 0, "resources/scene_0017/background.png", WHITE, true);
+
+    scene_0017_button_exit_0 = scene_add_button(&scene, 0, 0, 142, 332, BLANK, true, 0, scene_0017_on_pressed_button_exit_0);
+    scene_0017_button_exit_1 = scene_add_button(&scene, 142, 0, 260, 332, BLANK, true, 1, scene_0017_on_pressed_button_exit_1);
+    scene_0017_button_exit_2 = scene_add_button(&scene, 402, 0, 142, 332, BLANK, true, 2, scene_0017_on_pressed_button_exit_2);
+}
+void scene_0017_free(void)
+{
+    scene_0017_sprite_background = NULL;
+
+    scene_0017_button_exit_0 = NULL;
+    scene_0017_button_exit_1 = NULL;
+    scene_0017_button_exit_2 = NULL;
+}
+
+void scene_0017_enter(void)
+{
+
+}
+void scene_0017_exit(void)
+{
+
+}
+
+void scene_0017_update(float delta)
+{
+
+}
+void scene_0017_draw(void)
+{
+
+}
+
+void scene_0017_on_pressed_button_exit_0(void)
+{
+    set_scene(16);
+}
+void scene_0017_on_pressed_button_exit_1(void)
+{
+
+}
+void scene_0017_on_pressed_button_exit_2(void)
+{
+    set_scene(15);
+}
+
+/* -------- scene_0017 -------- */
