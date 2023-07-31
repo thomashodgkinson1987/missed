@@ -189,7 +189,8 @@ void scene_4_on_button_1_pressed(void);
 /* -------- scene_5 -------- */
 
 struct sprite * scene_5_sprite_background;
-struct sprite * scene_5_sprite_lever;
+struct sprite * scene_5_sprite_lever_down;
+struct sprite * scene_5_sprite_lever_up;
 
 struct button * scene_5_button_lever;
 struct button * scene_5_button_exit_0;
@@ -241,7 +242,7 @@ void scene_6_on_button_2_pressed(void);
 
 int main(void)
 {
-    InitWindow(512, 512, "Missed");
+    InitWindow(544, 332, "Missed");
     SetTargetFPS(60);
     HideCursor();
 
@@ -636,9 +637,9 @@ void set_scene(int index)
 
 void scene_0_init(void)
 {
-    scene_0_sprite_background = scene_add_sprite(&scene, 0, 0, "resources/scene_0_background.png", WHITE, true);
+    scene_0_sprite_background = scene_add_sprite(&scene, 0, 0, "resources/scene_0/background.png", WHITE, true);
 
-    scene_0_button_exit = scene_add_button(&scene, 306, 154, 138, 94, BLANK, true, 1, scene_0_on_button_0_pressed);
+    scene_0_button_exit = scene_add_button(&scene, 312, 70, 129, 89, BLANK, true, 1, scene_0_on_button_0_pressed);
 }
 void scene_0_free(void)
 {
@@ -678,11 +679,11 @@ void scene_0_on_button_0_pressed(void)
 
 void scene_1_init(void)
 {
-    scene_1_sprite_background = scene_add_sprite(&scene, 0, 0, "resources/scene_1_background.png", WHITE, true);
+    scene_1_sprite_background = scene_add_sprite(&scene, 0, 0, "resources/scene_1/background.png", WHITE, true);
 
-    scene_1_button_exit_0 = scene_add_button(&scene, 0, 0, 132, 512, BLANK, true, 3, scene_1_on_button_0_pressed);
-    scene_1_button_exit_1 = scene_add_button(&scene, 132, 0, 248, 512, BLANK, true, 0, scene_1_on_button_1_pressed);
-    scene_1_button_exit_2 = scene_add_button(&scene, 380, 0, 132, 512, BLANK, true, 2, scene_1_on_button_2_pressed);
+    scene_1_button_exit_0 = scene_add_button(&scene, 0, 0, 142, 332, BLANK, true, 3, scene_1_on_button_0_pressed);
+    scene_1_button_exit_1 = scene_add_button(&scene, 142, 0, 260, 332, BLANK, true, 0, scene_1_on_button_1_pressed);
+    scene_1_button_exit_2 = scene_add_button(&scene, 402, 0, 142, 332, BLANK, true, 2, scene_1_on_button_2_pressed);
 }
 void scene_1_free(void)
 {
@@ -732,10 +733,10 @@ void scene_1_on_button_2_pressed(void)
 
 void scene_2_init(void)
 {
-    scene_2_sprite_background = scene_add_sprite(&scene, 0, 0, "resources/scene_2_background.png", WHITE, true);
+    scene_2_sprite_background = scene_add_sprite(&scene, 0, 0, "resources/scene_2/background.png", WHITE, true);
 
-    scene_2_button_exit_0 = scene_add_button(&scene, 0, 0, 132, 512, BLANK, true, 3, scene_2_on_button_0_pressed);
-    scene_2_button_exit_1 = scene_add_button(&scene, 380, 0, 132, 512, BLANK, true, 2, scene_2_on_button_1_pressed);
+    scene_2_button_exit_0 = scene_add_button(&scene, 0, 0, 142, 332, BLANK, true, 3, scene_2_on_button_0_pressed);
+    scene_2_button_exit_1 = scene_add_button(&scene, 402, 0, 142, 332, BLANK, true, 2, scene_2_on_button_1_pressed);
 }
 void scene_2_free(void)
 {
@@ -780,10 +781,10 @@ void scene_2_on_button_1_pressed(void)
 
 void scene_3_init(void)
 {
-    scene_3_sprite_background = scene_add_sprite(&scene, 0, 0, "resources/scene_3_background.png", WHITE, true);
+    scene_3_sprite_background = scene_add_sprite(&scene, 0, 0, "resources/scene_3/background.png", WHITE, true);
 
-    scene_3_button_exit_0 = scene_add_button(&scene, 0, 0, 132, 512, BLANK, true, 3, scene_3_on_button_0_pressed);
-    scene_3_button_exit_1 = scene_add_button(&scene, 380, 0, 132, 512, BLANK, true, 2, scene_3_on_button_1_pressed);
+    scene_3_button_exit_0 = scene_add_button(&scene, 0, 0, 142, 332, BLANK, true, 3, scene_3_on_button_0_pressed);
+    scene_3_button_exit_1 = scene_add_button(&scene, 402, 0, 142, 332, BLANK, true, 2, scene_3_on_button_1_pressed);
 }
 void scene_3_free(void)
 {
@@ -828,10 +829,10 @@ void scene_3_on_button_1_pressed(void)
 
 void scene_4_init(void)
 {
-    scene_4_sprite_background = scene_add_sprite(&scene, 0, 0, "resources/scene_4_background.png", WHITE, true);
+    scene_4_sprite_background = scene_add_sprite(&scene, 0, 0, "resources/scene_4/background.png", WHITE, true);
 
-    scene_4_button_exit_0 = scene_add_button(&scene, 0, 0, 132, 512, BLANK, true, 3, scene_4_on_button_0_pressed);
-    scene_4_button_exit_1 = scene_add_button(&scene, 380, 0, 132, 512, BLANK, true, 2, scene_4_on_button_1_pressed);
+    scene_4_button_exit_0 = scene_add_button(&scene, 0, 0, 142, 332, BLANK, true, 3, scene_4_on_button_0_pressed);
+    scene_4_button_exit_1 = scene_add_button(&scene, 402, 0, 142, 332, BLANK, true, 2, scene_4_on_button_1_pressed);
 }
 void scene_4_free(void)
 {
@@ -876,12 +877,13 @@ void scene_4_on_button_1_pressed(void)
 
 void scene_5_init(void)
 {
-    scene_5_sprite_background = scene_add_sprite(&scene, 0, 0, "resources/scene_5_background.png", WHITE, true);
-    scene_5_sprite_lever = scene_add_sprite(&scene, 322, 280, "resources/scene_5_lever_up.png", WHITE, true);
+    scene_5_sprite_background = scene_add_sprite(&scene, 0, 0, "resources/scene_5/background.png", WHITE, true);
+    scene_5_sprite_lever_down = scene_add_sprite(&scene, 352, 183, "resources/scene_5/lever_down.png", WHITE, true);
+    scene_5_sprite_lever_up = scene_add_sprite(&scene, 352, 183, "resources/scene_5/lever_up.png", WHITE, true);
 
-    scene_5_button_lever = scene_add_button(&scene, 322, 280, 48, 74, BLANK, true, 1, scene_5_on_button_0_pressed);
-    scene_5_button_exit_0 = scene_add_button(&scene, 0, 0, 380, 512, BLANK, true, 0, scene_5_on_button_1_pressed);
-    scene_5_button_exit_1 = scene_add_button(&scene, 380, 0, 132, 512, BLANK, true, 2, scene_5_on_button_2_pressed);
+    scene_5_button_lever = scene_add_button(&scene, 352, 183, 39, 41, BLANK, true, 1, scene_5_on_button_0_pressed);
+    scene_5_button_exit_0 = scene_add_button(&scene, 0, 0, 402, 332, BLANK, true, 0, scene_5_on_button_1_pressed);
+    scene_5_button_exit_1 = scene_add_button(&scene, 402, 0, 142, 332, BLANK, true, 2, scene_5_on_button_2_pressed);
 
     scene_5_is_lever_down = true;
 
@@ -897,7 +899,8 @@ void scene_5_init(void)
 void scene_5_free(void)
 {
     scene_5_sprite_background = NULL;
-    scene_5_sprite_lever = NULL;
+    scene_5_sprite_lever_down = NULL;
+    scene_5_sprite_lever_up = NULL;
 
     scene_5_button_lever = NULL;
     scene_5_button_exit_0 = NULL;
@@ -908,7 +911,8 @@ void scene_5_free(void)
 
 void scene_5_enter(void)
 {
-    sprite_set_is_visible(scene_5_sprite_lever, !scene_5_is_lever_down);
+    sprite_set_is_visible(scene_5_sprite_lever_down, scene_5_is_lever_down);
+    sprite_set_is_visible(scene_5_sprite_lever_up, !scene_5_is_lever_down);
 }
 void scene_5_exit(void)
 {
@@ -929,7 +933,8 @@ void scene_5_on_button_0_pressed(void)
     scene_5_is_lever_down = !scene_5_is_lever_down;
     game_data_set_bool(&game_data, "scene_5_is_lever_down", scene_5_is_lever_down);
 
-    sprite_set_is_visible(scene_5_sprite_lever, !scene_5_is_lever_down);
+    sprite_set_is_visible(scene_5_sprite_lever_down, scene_5_is_lever_down);
+    sprite_set_is_visible(scene_5_sprite_lever_up, !scene_5_is_lever_down);
 }
 void scene_5_on_button_1_pressed(void)
 {
@@ -948,11 +953,11 @@ void scene_5_on_button_2_pressed(void)
 
 void scene_6_init(void)
 {
-    scene_6_sprite_background = scene_add_sprite(&scene, 0, 0, "resources/scene_6_background.png", WHITE, true);
+    scene_6_sprite_background = scene_add_sprite(&scene, 0, 0, "resources/scene_6/background.png", WHITE, true);
 
-    scene_6_button_exit_0 = scene_add_button(&scene, 0, 0, 132, 512, BLANK, true, 3, scene_6_on_button_0_pressed);
-    scene_6_button_exit_1 = scene_add_button(&scene, 132, 0, 248, 512, BLANK, true, 0, scene_6_on_button_1_pressed);
-    scene_6_button_exit_2 = scene_add_button(&scene, 380, 0, 132, 512, BLANK, true, 2, scene_6_on_button_2_pressed);
+    scene_6_button_exit_0 = scene_add_button(&scene, 0, 0, 142, 332, BLANK, true, 3, scene_6_on_button_0_pressed);
+    scene_6_button_exit_1 = scene_add_button(&scene, 142, 0, 402, 332, BLANK, true, 0, scene_6_on_button_1_pressed);
+    scene_6_button_exit_2 = scene_add_button(&scene, 402, 0, 142, 332, BLANK, true, 2, scene_6_on_button_2_pressed);
 }
 void scene_6_free(void)
 {
