@@ -48,7 +48,7 @@ void scene_0001_load(void)
     scene_add_button(scene, 0, 0, 544, 332, BLANK, true, 1,
         NULL, NULL, on_released_button_quit);
 
-    slide_time = 5.0f;
+    slide_time = 4.0f;
     slide_timer = 0.0f;
 
     slides_count = 7;
@@ -107,7 +107,16 @@ void scene_0001_exit(void)
 
 void scene_0001_update(float delta)
 {
-
+    slide_timer += delta;
+    if (slide_timer >= slide_time)
+    {
+        slide_timer = 0.0f;
+        sprite_toggle_is_visible(slides[current_slide_index++]);
+        if (current_slide_index < slides_count)
+            sprite_toggle_is_visible(slides[current_slide_index]);
+        else
+            set_scene(-1);
+    }
 }
 void scene_0001_draw(void)
 {
