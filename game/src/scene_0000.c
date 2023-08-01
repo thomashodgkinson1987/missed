@@ -31,12 +31,12 @@ void scene_0000_free(void)
 
 void scene_0000_load(void)
 {
-    scene_add_sprite(scene, 0, 0, "resources/scene_0000/background.png", WHITE, true);
+    scene_add_sprite(scene, 0, 0, "resources/title_screen/background.png", WHITE, true);
 
-    scene_add_sprite(scene, 446, 249, "resources/scene_0000/new_game_over.png", WHITE, false);
-    scene_add_sprite(scene, 439, 266, "resources/scene_0000/load_game_over.png", WHITE, false);
-    scene_add_sprite(scene, 493, 317, "resources/scene_0000/quit_over.png", WHITE, false);
-    scene_add_sprite(scene, 10, 310, "resources/scene_0000/options_over.png", WHITE, false);
+    scene_add_sprite(scene, 446, 249, "resources/title_screen/new_game_over.png", WHITE, false);
+    scene_add_sprite(scene, 439, 266, "resources/title_screen/load_game_over.png", WHITE, false);
+    scene_add_sprite(scene, 493, 317, "resources/title_screen/quit_over.png", WHITE, false);
+    scene_add_sprite(scene, 10, 310, "resources/title_screen/options_over.png", WHITE, false);
 
     scene_add_button(scene, 446, 249, 87, 12, BLANK, true, 1,
         NULL, NULL, on_released_button_new_game);

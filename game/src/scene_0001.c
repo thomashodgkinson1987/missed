@@ -37,13 +37,13 @@ void scene_0001_free(void)
 
 void scene_0001_load(void)
 {
-    scene_add_sprite(scene, 0, 0, "resources/scene_0001/slide_0000.png", WHITE, true);
-    scene_add_sprite(scene, 0, 0, "resources/scene_0001/slide_0001.png", WHITE, false);
-    scene_add_sprite(scene, 0, 0, "resources/scene_0001/slide_0002.png", WHITE, false);
-    scene_add_sprite(scene, 0, 0, "resources/scene_0001/slide_0003.png", WHITE, false);
-    scene_add_sprite(scene, 0, 0, "resources/scene_0001/slide_0004.png", WHITE, false);
-    scene_add_sprite(scene, 0, 0, "resources/scene_0001/slide_0005.png", WHITE, false);
-    scene_add_sprite(scene, 0, 0, "resources/scene_0001/slide_0006.png", WHITE, false);
+    scene_add_sprite(scene, 0, 0, "resources/credits_slides/slide_0.png", WHITE, true);
+    scene_add_sprite(scene, 0, 0, "resources/credits_slides/slide_1.png", WHITE, false);
+    scene_add_sprite(scene, 0, 0, "resources/credits_slides/slide_2.png", WHITE, false);
+    scene_add_sprite(scene, 0, 0, "resources/credits_slides/slide_3.png", WHITE, false);
+    scene_add_sprite(scene, 0, 0, "resources/credits_slides/slide_4.png", WHITE, false);
+    scene_add_sprite(scene, 0, 0, "resources/credits_slides/slide_5.png", WHITE, false);
+    scene_add_sprite(scene, 0, 0, "resources/credits_slides/slide_6.png", WHITE, false);
 
     scene_add_button(scene, 0, 0, 544, 332, BLANK, true, 1,
         NULL, NULL, on_released_button_quit);
