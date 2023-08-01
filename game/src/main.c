@@ -39,7 +39,7 @@ int current_scene_index;
 int next_scene_index;
 
 bool is_scene_transition;
-enum scene_transision_enum scene_transision_state;
+enum scene_transision_enum scene_transition_state;
 float scene_transition_fade_out_time;
 float scene_transition_wait_time;
 float scene_transition_fade_in_time;
@@ -49,14 +49,17 @@ Color scene_transition_color;
 bool is_draw_debug;
 
 struct scene scene;
-void(*function_pointers_scene_init[18])(void);
-void(*function_pointers_scene_free[18])(void);
-void(*function_pointers_scene_enter[18])(void);
-void(*function_pointers_scene_exit[18])(void);
-void(*function_pointers_scene_update[18])(float delta);
-void(*function_pointers_scene_draw[18])(void);
+
+struct array function_pointers_scene_init;
+struct array function_pointers_scene_free;
+struct array function_pointers_scene_enter;
+struct array function_pointers_scene_exit;
+struct array function_pointers_scene_update;
+struct array function_pointers_scene_draw;
 
 RenderTexture2D render_texture;
+
+struct button * current_button;
 
 
 
@@ -65,10 +68,19 @@ void game_free(void);
 void game_reset(void);
 
 void game_update(float delta);
+void game_update_scene_transition(float delta);
+void game_update_scene(float delta);
+
 void game_draw(void);
+void game_draw_scene(void);
+void game_draw_mouse(void);
+void game_draw_scene_transition(void);
+void game_draw_debug(void);
+void game_draw_render_texture(void);
 
 
 
+void add_scene(void(*scene_init)(void), void(*scene_free)(void), void(*scene_enter)(void), void(*scene_exit)(void), void(*scene_update)(float delta), void(*scene_draw)(void));
 void set_scene(int index);
 
 
@@ -705,6 +717,7 @@ void game_init(void)
     mouse_cursor_textures[2] = LoadTexture("resources/mouse_cursor/0002.png");
     mouse_cursor_textures[3] = LoadTexture("resources/mouse_cursor/0003.png");
     mouse_cursor_textures[4] = LoadTexture("resources/mouse_cursor/0004.png");
+
     mouse_cursor_offsets[0] = (Vector2){ -2.0f, -8.0f };
     mouse_cursor_offsets[1] = (Vector2){ -8.0f, -2.0f };
     mouse_cursor_offsets[2] = (Vector2){ -15.0f, -8.0f };
@@ -717,7 +730,7 @@ void game_init(void)
     next_scene_index = 0;
 
     is_scene_transition = true;
-    scene_transision_state = SCENE_TRANSITION_RUN;
+    scene_transition_state = SCENE_TRANSITION_RUN;
     scene_transition_fade_out_time = 0.0f;
     scene_transition_wait_time = 0.0f;
     scene_transition_fade_in_time = 0.0f;
@@ -726,131 +739,40 @@ void game_init(void)
 
     scene = (struct scene){ 0 };
 
-    function_pointers_scene_init[0] = scene_0000_init;
-    function_pointers_scene_free[0] = scene_0000_free;
-    function_pointers_scene_enter[0] = scene_0000_enter;
-    function_pointers_scene_exit[0] = scene_0000_exit;
-    function_pointers_scene_update[0] = scene_0000_update;
-    function_pointers_scene_draw[0] = scene_0000_draw;
+    function_pointers_scene_init = array_create(1, sizeof(void(*)(void)));
+    function_pointers_scene_free = array_create(1, sizeof(void(*)(void)));
+    function_pointers_scene_enter = array_create(1, sizeof(void(*)(void)));
+    function_pointers_scene_exit = array_create(1, sizeof(void(*)(void)));
+    function_pointers_scene_update = array_create(1, sizeof(void(*)(float delta)));
+    function_pointers_scene_draw = array_create(1, sizeof(void(*)(void)));
 
-    function_pointers_scene_init[1] = scene_0001_init;
-    function_pointers_scene_free[1] = scene_0001_free;
-    function_pointers_scene_enter[1] = scene_0001_enter;
-    function_pointers_scene_exit[1] = scene_0001_exit;
-    function_pointers_scene_update[1] = scene_0001_update;
-    function_pointers_scene_draw[1] = scene_0001_draw;
+    array_init(&function_pointers_scene_init);
+    array_init(&function_pointers_scene_free);
+    array_init(&function_pointers_scene_enter);
+    array_init(&function_pointers_scene_exit);
+    array_init(&function_pointers_scene_update);
+    array_init(&function_pointers_scene_draw);
 
-    function_pointers_scene_init[2] = scene_0002_init;
-    function_pointers_scene_free[2] = scene_0002_free;
-    function_pointers_scene_enter[2] = scene_0002_enter;
-    function_pointers_scene_exit[2] = scene_0002_exit;
-    function_pointers_scene_update[2] = scene_0002_update;
-    function_pointers_scene_draw[2] = scene_0002_draw;
+    printf("");
 
-    function_pointers_scene_init[3] = scene_0003_init;
-    function_pointers_scene_free[3] = scene_0003_free;
-    function_pointers_scene_enter[3] = scene_0003_enter;
-    function_pointers_scene_exit[3] = scene_0003_exit;
-    function_pointers_scene_update[3] = scene_0003_update;
-    function_pointers_scene_draw[3] = scene_0003_draw;
-
-    function_pointers_scene_init[4] = scene_0004_init;
-    function_pointers_scene_free[4] = scene_0004_free;
-    function_pointers_scene_enter[4] = scene_0004_enter;
-    function_pointers_scene_exit[4] = scene_0004_exit;
-    function_pointers_scene_update[4] = scene_0004_update;
-    function_pointers_scene_draw[4] = scene_0004_draw;
-
-    function_pointers_scene_init[5] = scene_0005_init;
-    function_pointers_scene_free[5] = scene_0005_free;
-    function_pointers_scene_enter[5] = scene_0005_enter;
-    function_pointers_scene_exit[5] = scene_0005_exit;
-    function_pointers_scene_update[5] = scene_0005_update;
-    function_pointers_scene_draw[5] = scene_0005_draw;
-
-    function_pointers_scene_init[6] = scene_0006_init;
-    function_pointers_scene_free[6] = scene_0006_free;
-    function_pointers_scene_enter[6] = scene_0006_enter;
-    function_pointers_scene_exit[6] = scene_0006_exit;
-    function_pointers_scene_update[6] = scene_0006_update;
-    function_pointers_scene_draw[6] = scene_0006_draw;
-
-    function_pointers_scene_init[7] = scene_0007_init;
-    function_pointers_scene_free[7] = scene_0007_free;
-    function_pointers_scene_enter[7] = scene_0007_enter;
-    function_pointers_scene_exit[7] = scene_0007_exit;
-    function_pointers_scene_update[7] = scene_0007_update;
-    function_pointers_scene_draw[7] = scene_0007_draw;
-
-    function_pointers_scene_init[8] = scene_0008_init;
-    function_pointers_scene_free[8] = scene_0008_free;
-    function_pointers_scene_enter[8] = scene_0008_enter;
-    function_pointers_scene_exit[8] = scene_0008_exit;
-    function_pointers_scene_update[8] = scene_0008_update;
-    function_pointers_scene_draw[8] = scene_0008_draw;
-
-    function_pointers_scene_init[9] = scene_0009_init;
-    function_pointers_scene_free[9] = scene_0009_free;
-    function_pointers_scene_enter[9] = scene_0009_enter;
-    function_pointers_scene_exit[9] = scene_0009_exit;
-    function_pointers_scene_update[9] = scene_0009_update;
-    function_pointers_scene_draw[9] = scene_0009_draw;
-
-    function_pointers_scene_init[10] = scene_0010_init;
-    function_pointers_scene_free[10] = scene_0010_free;
-    function_pointers_scene_enter[10] = scene_0010_enter;
-    function_pointers_scene_exit[10] = scene_0010_exit;
-    function_pointers_scene_update[10] = scene_0010_update;
-    function_pointers_scene_draw[10] = scene_0010_draw;
-
-    function_pointers_scene_init[11] = scene_0011_init;
-    function_pointers_scene_free[11] = scene_0011_free;
-    function_pointers_scene_enter[11] = scene_0011_enter;
-    function_pointers_scene_exit[11] = scene_0011_exit;
-    function_pointers_scene_update[11] = scene_0011_update;
-    function_pointers_scene_draw[11] = scene_0011_draw;
-
-    function_pointers_scene_init[12] = scene_0012_init;
-    function_pointers_scene_free[12] = scene_0012_free;
-    function_pointers_scene_enter[12] = scene_0012_enter;
-    function_pointers_scene_exit[12] = scene_0012_exit;
-    function_pointers_scene_update[12] = scene_0012_update;
-    function_pointers_scene_draw[12] = scene_0012_draw;
-
-    function_pointers_scene_init[13] = scene_0013_init;
-    function_pointers_scene_free[13] = scene_0013_free;
-    function_pointers_scene_enter[13] = scene_0013_enter;
-    function_pointers_scene_exit[13] = scene_0013_exit;
-    function_pointers_scene_update[13] = scene_0013_update;
-    function_pointers_scene_draw[13] = scene_0013_draw;
-
-    function_pointers_scene_init[14] = scene_0014_init;
-    function_pointers_scene_free[14] = scene_0014_free;
-    function_pointers_scene_enter[14] = scene_0014_enter;
-    function_pointers_scene_exit[14] = scene_0014_exit;
-    function_pointers_scene_update[14] = scene_0014_update;
-    function_pointers_scene_draw[14] = scene_0014_draw;
-
-    function_pointers_scene_init[15] = scene_0015_init;
-    function_pointers_scene_free[15] = scene_0015_free;
-    function_pointers_scene_enter[15] = scene_0015_enter;
-    function_pointers_scene_exit[15] = scene_0015_exit;
-    function_pointers_scene_update[15] = scene_0015_update;
-    function_pointers_scene_draw[15] = scene_0015_draw;
-
-    function_pointers_scene_init[16] = scene_0016_init;
-    function_pointers_scene_free[16] = scene_0016_free;
-    function_pointers_scene_enter[16] = scene_0016_enter;
-    function_pointers_scene_exit[16] = scene_0016_exit;
-    function_pointers_scene_update[16] = scene_0016_update;
-    function_pointers_scene_draw[16] = scene_0016_draw;
-
-    function_pointers_scene_init[17] = scene_0017_init;
-    function_pointers_scene_free[17] = scene_0017_free;
-    function_pointers_scene_enter[17] = scene_0017_enter;
-    function_pointers_scene_exit[17] = scene_0017_exit;
-    function_pointers_scene_update[17] = scene_0017_update;
-    function_pointers_scene_draw[17] = scene_0017_draw;
+    add_scene(scene_0000_init, scene_0000_free, scene_0000_enter, scene_0000_exit, scene_0000_update, scene_0000_draw);
+    add_scene(scene_0001_init, scene_0001_free, scene_0001_enter, scene_0001_exit, scene_0001_update, scene_0001_draw);
+    add_scene(scene_0002_init, scene_0002_free, scene_0002_enter, scene_0002_exit, scene_0002_update, scene_0002_draw);
+    add_scene(scene_0003_init, scene_0003_free, scene_0003_enter, scene_0003_exit, scene_0003_update, scene_0003_draw);
+    add_scene(scene_0004_init, scene_0004_free, scene_0004_enter, scene_0004_exit, scene_0004_update, scene_0004_draw);
+    add_scene(scene_0005_init, scene_0005_free, scene_0005_enter, scene_0005_exit, scene_0005_update, scene_0005_draw);
+    add_scene(scene_0006_init, scene_0006_free, scene_0006_enter, scene_0006_exit, scene_0006_update, scene_0006_draw);
+    add_scene(scene_0007_init, scene_0007_free, scene_0007_enter, scene_0007_exit, scene_0007_update, scene_0007_draw);
+    add_scene(scene_0008_init, scene_0008_free, scene_0008_enter, scene_0008_exit, scene_0008_update, scene_0008_draw);
+    add_scene(scene_0009_init, scene_0009_free, scene_0009_enter, scene_0009_exit, scene_0009_update, scene_0009_draw);
+    add_scene(scene_0010_init, scene_0010_free, scene_0010_enter, scene_0010_exit, scene_0010_update, scene_0010_draw);
+    add_scene(scene_0011_init, scene_0011_free, scene_0011_enter, scene_0011_exit, scene_0011_update, scene_0011_draw);
+    add_scene(scene_0012_init, scene_0012_free, scene_0012_enter, scene_0012_exit, scene_0012_update, scene_0012_draw);
+    add_scene(scene_0013_init, scene_0013_free, scene_0013_enter, scene_0013_exit, scene_0013_update, scene_0013_draw);
+    add_scene(scene_0014_init, scene_0014_free, scene_0014_enter, scene_0014_exit, scene_0014_update, scene_0014_draw);
+    add_scene(scene_0015_init, scene_0015_free, scene_0015_enter, scene_0015_exit, scene_0015_update, scene_0015_draw);
+    add_scene(scene_0016_init, scene_0016_free, scene_0016_enter, scene_0016_exit, scene_0016_update, scene_0016_draw);
+    add_scene(scene_0017_init, scene_0017_free, scene_0017_enter, scene_0017_exit, scene_0017_update, scene_0017_draw);
 
     is_draw_debug = true;
 
@@ -862,7 +784,8 @@ void game_free(void)
 
     if (current_scene_index != -1)
     {
-        function_pointers_scene_free[current_scene_index]();
+        (*(void(**)(void))array_get(&function_pointers_scene_exit, current_scene_index))();
+        (*(void(**)(void))array_get(&function_pointers_scene_free, current_scene_index))();
         scene_free(&scene);
         scene = (struct scene){ 0 };
     }
@@ -887,7 +810,7 @@ void game_free(void)
     next_scene_index = -1;
 
     is_scene_transition = false;
-    scene_transision_state = SCENE_TRANSITION_IDLE;
+    scene_transition_state = SCENE_TRANSITION_IDLE;
     scene_transition_fade_out_time = 0.0f;
     scene_transition_wait_time = 0.0f;
     scene_transition_fade_in_time = 0.0f;
@@ -896,133 +819,23 @@ void game_free(void)
 
     scene = (struct scene){ 0 };
 
-    function_pointers_scene_init[0] = NULL;
-    function_pointers_scene_free[0] = NULL;
-    function_pointers_scene_enter[0] = NULL;
-    function_pointers_scene_exit[0] = NULL;
-    function_pointers_scene_update[0] = NULL;
-    function_pointers_scene_draw[0] = NULL;
+    array_free(&function_pointers_scene_init);
+    array_free(&function_pointers_scene_free);
+    array_free(&function_pointers_scene_enter);
+    array_free(&function_pointers_scene_exit);
+    array_free(&function_pointers_scene_update);
+    array_free(&function_pointers_scene_draw);
 
-    function_pointers_scene_init[1] = NULL;
-    function_pointers_scene_free[1] = NULL;
-    function_pointers_scene_enter[1] = NULL;
-    function_pointers_scene_exit[1] = NULL;
-    function_pointers_scene_update[1] = NULL;
-    function_pointers_scene_draw[1] = NULL;
-
-    function_pointers_scene_init[2] = NULL;
-    function_pointers_scene_free[2] = NULL;
-    function_pointers_scene_enter[2] = NULL;
-    function_pointers_scene_exit[2] = NULL;
-    function_pointers_scene_update[2] = NULL;
-    function_pointers_scene_draw[2] = NULL;
-
-    function_pointers_scene_init[3] = NULL;
-    function_pointers_scene_free[3] = NULL;
-    function_pointers_scene_enter[3] = NULL;
-    function_pointers_scene_exit[3] = NULL;
-    function_pointers_scene_update[3] = NULL;
-    function_pointers_scene_draw[3] = NULL;
-
-    function_pointers_scene_init[4] = NULL;
-    function_pointers_scene_free[4] = NULL;
-    function_pointers_scene_enter[4] = NULL;
-    function_pointers_scene_exit[4] = NULL;
-    function_pointers_scene_update[4] = NULL;
-    function_pointers_scene_draw[4] = NULL;
-
-    function_pointers_scene_init[5] = NULL;
-    function_pointers_scene_free[5] = NULL;
-    function_pointers_scene_enter[5] = NULL;
-    function_pointers_scene_exit[5] = NULL;
-    function_pointers_scene_update[5] = NULL;
-    function_pointers_scene_draw[5] = NULL;
-
-    function_pointers_scene_init[6] = NULL;
-    function_pointers_scene_free[6] = NULL;
-    function_pointers_scene_enter[6] = NULL;
-    function_pointers_scene_exit[6] = NULL;
-    function_pointers_scene_update[6] = NULL;
-    function_pointers_scene_draw[6] = NULL;
-
-    function_pointers_scene_init[7] = NULL;
-    function_pointers_scene_free[7] = NULL;
-    function_pointers_scene_enter[7] = NULL;
-    function_pointers_scene_exit[7] = NULL;
-    function_pointers_scene_update[7] = NULL;
-    function_pointers_scene_draw[7] = NULL;
-
-    function_pointers_scene_init[8] = NULL;
-    function_pointers_scene_free[8] = NULL;
-    function_pointers_scene_enter[8] = NULL;
-    function_pointers_scene_exit[8] = NULL;
-    function_pointers_scene_update[8] = NULL;
-    function_pointers_scene_draw[8] = NULL;
-
-    function_pointers_scene_init[9] = NULL;
-    function_pointers_scene_free[9] = NULL;
-    function_pointers_scene_enter[9] = NULL;
-    function_pointers_scene_exit[9] = NULL;
-    function_pointers_scene_update[9] = NULL;
-    function_pointers_scene_draw[9] = NULL;
-
-    function_pointers_scene_init[10] = NULL;
-    function_pointers_scene_free[10] = NULL;
-    function_pointers_scene_enter[10] = NULL;
-    function_pointers_scene_exit[10] = NULL;
-    function_pointers_scene_update[10] = NULL;
-    function_pointers_scene_draw[10] = NULL;
-
-    function_pointers_scene_init[11] = NULL;
-    function_pointers_scene_free[11] = NULL;
-    function_pointers_scene_enter[11] = NULL;
-    function_pointers_scene_exit[11] = NULL;
-    function_pointers_scene_update[11] = NULL;
-    function_pointers_scene_draw[11] = NULL;
-
-    function_pointers_scene_init[12] = NULL;
-    function_pointers_scene_free[12] = NULL;
-    function_pointers_scene_enter[12] = NULL;
-    function_pointers_scene_exit[12] = NULL;
-    function_pointers_scene_update[12] = NULL;
-    function_pointers_scene_draw[12] = NULL;
-
-    function_pointers_scene_init[13] = NULL;
-    function_pointers_scene_free[13] = NULL;
-    function_pointers_scene_enter[13] = NULL;
-    function_pointers_scene_exit[13] = NULL;
-    function_pointers_scene_update[13] = NULL;
-    function_pointers_scene_draw[13] = NULL;
-
-    function_pointers_scene_init[14] = NULL;
-    function_pointers_scene_free[14] = NULL;
-    function_pointers_scene_enter[14] = NULL;
-    function_pointers_scene_exit[14] = NULL;
-    function_pointers_scene_update[14] = NULL;
-    function_pointers_scene_draw[14] = NULL;
-
-    function_pointers_scene_init[15] = NULL;
-    function_pointers_scene_free[15] = NULL;
-    function_pointers_scene_enter[15] = NULL;
-    function_pointers_scene_exit[15] = NULL;
-    function_pointers_scene_update[15] = NULL;
-    function_pointers_scene_draw[15] = NULL;
-
-    function_pointers_scene_init[16] = NULL;
-    function_pointers_scene_free[16] = NULL;
-    function_pointers_scene_enter[16] = NULL;
-    function_pointers_scene_exit[16] = NULL;
-    function_pointers_scene_update[16] = NULL;
-    function_pointers_scene_draw[16] = NULL;
-
-    function_pointers_scene_init[17] = NULL;
-    function_pointers_scene_free[17] = NULL;
-    function_pointers_scene_enter[17] = NULL;
-    function_pointers_scene_exit[17] = NULL;
-    function_pointers_scene_update[17] = NULL;
-    function_pointers_scene_draw[17] = NULL;
+    function_pointers_scene_init = (struct array){ 0 };
+    function_pointers_scene_free = (struct array){ 0 };
+    function_pointers_scene_enter = (struct array){ 0 };
+    function_pointers_scene_exit = (struct array){ 0 };
+    function_pointers_scene_update = (struct array){ 0 };
+    function_pointers_scene_draw = (struct array){ 0 };
 
     is_draw_debug = false;
+
+    UnloadRenderTexture(render_texture);
 }
 void game_reset(void)
 {
@@ -1047,148 +860,170 @@ void game_update(float delta)
 
     if (is_scene_transition)
     {
-        if (scene_transision_state == SCENE_TRANSITION_START)
-        {
-            scene_transition_timer = 0.0f;
-            scene_transition_color.a = 0;
-            scene_transision_state = SCENE_TRANSITION_FADE_OUT;
-        }
-        if (scene_transision_state == SCENE_TRANSITION_FADE_OUT)
-        {
-            scene_transition_timer += delta;
-            if (scene_transition_timer < scene_transition_fade_out_time)
-            {
-                scene_transition_color.a = (unsigned char)(255 * (scene_transition_timer / scene_transition_fade_out_time));
-            }
-            else
-            {
-                scene_transition_color.a = 255;
-                scene_transition_timer = 0.0f;
-                scene_transision_state = SCENE_TRANSITION_RUN;
-            }
-        }
-        if (scene_transision_state == SCENE_TRANSITION_RUN)
-        {
-            if (current_scene_index != -1)
-            {
-                function_pointers_scene_exit[current_scene_index]();
-                function_pointers_scene_free[current_scene_index]();
-                scene_free(&scene);
-                scene = (struct scene){ 0 };
-            }
-            current_scene_index = next_scene_index;
-            next_scene_index = -1;
-            if (current_scene_index != -1)
-            {
-                scene = scene_create();
-                scene_init(&scene);
-                function_pointers_scene_init[current_scene_index]();
-                function_pointers_scene_enter[current_scene_index]();
-            }
-            scene_transision_state = SCENE_TRANSITION_WAIT;
-        }
-        if (scene_transision_state == SCENE_TRANSITION_WAIT)
-        {
-            scene_transition_timer += delta;
-            if (scene_transition_timer >= scene_transition_wait_time)
-            {
-                scene_transition_timer = 0.0f;
-                scene_transision_state = SCENE_TRANSITION_FADE_IN;
-            }
-        }
-        if (scene_transision_state == SCENE_TRANSITION_FADE_IN)
-        {
-            scene_transition_timer += delta;
-            if (scene_transition_timer < scene_transition_fade_in_time)
-            {
-                scene_transition_color.a = (unsigned char)(255 * (1.0f - (scene_transition_timer / scene_transition_fade_in_time)));
-            }
-            else
-            {
-                scene_transition_color.a = 0;
-                scene_transition_timer = 0.0f;
-                scene_transision_state = SCENE_TRANSITION_END;
-            }
-        }
-        if (scene_transision_state == SCENE_TRANSITION_END)
-        {
-            is_mouse_input_enabled = true;
-            is_scene_transition = false;
-            scene_transision_state = SCENE_TRANSITION_IDLE;
-        }
+        game_update_scene_transition(delta);
     }
 
     if (current_scene_index != -1)
     {
-        scene_translate_elapsed_time(&scene, delta);
-
-        current_mouse_cursor_index = 1;
-
-        if (is_mouse_input_enabled)
+        game_update_scene(delta);
+    }
+}
+void game_update_scene_transition(float delta)
+{
+    if (scene_transition_state == SCENE_TRANSITION_START)
+    {
+        scene_transition_timer = 0.0f;
+        scene_transition_color.a = 0;
+        scene_transition_state = SCENE_TRANSITION_FADE_OUT;
+    }
+    if (scene_transition_state == SCENE_TRANSITION_FADE_OUT)
+    {
+        scene_transition_timer += delta;
+        if (scene_transition_timer < scene_transition_fade_out_time)
         {
-            Vector2 mouse_position = GetMousePosition();
+            scene_transition_color.a = (unsigned char)(255 * (scene_transition_timer / scene_transition_fade_out_time));
+        }
+        else
+        {
+            scene_transition_color.a = 255;
+            scene_transition_timer = 0.0f;
+            scene_transition_state = SCENE_TRANSITION_RUN;
+        }
+    }
+    if (scene_transition_state == SCENE_TRANSITION_RUN)
+    {
+        if (current_scene_index != -1)
+        {
+            (*(void(**)(void))array_get(&function_pointers_scene_exit, current_scene_index))();
+            (*(void(**)(void))array_get(&function_pointers_scene_free, current_scene_index))();
+            scene_free(&scene);
+            scene = (struct scene){ 0 };
+        }
+        current_scene_index = next_scene_index;
+        next_scene_index = -1;
+        if (current_scene_index != -1)
+        {
+            scene = scene_create();
+            scene_init(&scene);
 
-            struct button * ptr = NULL;
+            (*(void(**)(void))array_get(&function_pointers_scene_init, current_scene_index))();
+            (*(void(**)(void))array_get(&function_pointers_scene_enter, current_scene_index))();
+        }
+        scene_transition_state = SCENE_TRANSITION_WAIT;
+    }
+    if (scene_transition_state == SCENE_TRANSITION_WAIT)
+    {
+        scene_transition_timer += delta;
+        if (scene_transition_timer >= scene_transition_wait_time)
+        {
+            scene_transition_timer = 0.0f;
+            scene_transition_state = SCENE_TRANSITION_FADE_IN;
+        }
+    }
+    if (scene_transition_state == SCENE_TRANSITION_FADE_IN)
+    {
+        scene_transition_timer += delta;
+        if (scene_transition_timer < scene_transition_fade_in_time)
+        {
+            scene_transition_color.a = (unsigned char)(255 * (1.0f - (scene_transition_timer / scene_transition_fade_in_time)));
+        }
+        else
+        {
+            scene_transition_color.a = 0;
+            scene_transition_timer = 0.0f;
+            scene_transition_state = SCENE_TRANSITION_END;
+        }
+    }
+    if (scene_transition_state == SCENE_TRANSITION_END)
+    {
+        is_mouse_input_enabled = true;
+        is_scene_transition = false;
+        scene_transition_state = SCENE_TRANSITION_IDLE;
+    }
+}
+void game_update_scene(float delta)
+{
+    scene_translate_elapsed_time(&scene, delta);
 
-            for (int i = 0; i < scene_get_buttons_count(&scene); ++i)
+    current_mouse_cursor_index = 1;
+
+    if (is_mouse_input_enabled)
+    {
+        Vector2 mouse_position = GetMousePosition();
+
+        struct button * ptr = NULL;
+
+        for (int i = 0; i < scene_get_buttons_count(&scene); ++i)
+        {
+            struct button * button = scene_get_button(&scene, i);
+
+            if (!button_get_is_enabled(button))
             {
-                struct button * button = scene_get_button(&scene, i);
-
-                if (!button_get_is_enabled(button))
-                {
-                    button_set_was_mouse_over(button, false);
-                    button_set_is_mouse_over(button, false);
-                    button_set_was_down(button, false);
-                    button_set_is_down(button, false);
-                    continue;
-                }
-
-                button_set_was_mouse_over(button, button_get_is_mouse_over(button));
+                button_set_was_mouse_over(button, false);
                 button_set_is_mouse_over(button, false);
-
-                button_set_was_down(button, button_get_is_down(button));
+                button_set_was_down(button, false);
                 button_set_is_down(button, false);
-
-                if (ptr == NULL)
-                {
-                    int x = button_get_x(button);
-                    int y = button_get_y(button);
-                    int width = button_get_width(button);
-                    int height = button_get_height(button);
-
-                    if (mouse_position.x >= x && mouse_position.x < x + width && mouse_position.y >= y && mouse_position.y < y + height)
-                    {
-                        ptr = button;
-                        current_mouse_cursor_index = button_get_mouse_cursor_index(button);
-                        button_set_is_mouse_over(button, true);
-                    }
-                }
+                continue;
             }
 
-            if (ptr != NULL)
+            button_set_was_mouse_over(button, button_get_is_mouse_over(button));
+            button_set_is_mouse_over(button, false);
+
+            button_set_was_down(button, button_get_is_down(button));
+            button_set_is_down(button, false);
+
+            if (ptr == NULL)
             {
-                if (IsMouseButtonDown(MOUSE_BUTTON_LEFT))
+                int x = button_get_x(button);
+                int y = button_get_y(button);
+                int width = button_get_width(button);
+                int height = button_get_height(button);
+
+                if (mouse_position.x >= x && mouse_position.x < x + width && mouse_position.y >= y && mouse_position.y < y + height)
                 {
-                    button_set_is_down(ptr, true);
-                }
-                if (!button_get_was_down(ptr) && button_get_is_down(ptr))
-                {
-                    button_get_on_pressed(ptr)();
-                }
-                else if (button_get_was_down(ptr) && button_get_is_down(ptr))
-                {
-                    button_get_on_down(ptr)();
-                }
-                else if (button_get_was_down(ptr) && !button_get_is_down(ptr))
-                {
-                    button_get_on_released(ptr)();
+                    ptr = button;
+                    current_mouse_cursor_index = button_get_mouse_cursor_index(button);
+                    button_set_is_mouse_over(button, true);
                 }
             }
         }
 
-        function_pointers_scene_update[current_scene_index](delta);
+        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
+        {
+            if (ptr != NULL)
+            {
+                current_button = ptr;
+                button_set_is_down(current_button, true);
+                button_get_on_pressed(current_button)();
+                button_get_on_down(current_button)();
+            }
+        }
+        else if (IsMouseButtonDown(MOUSE_BUTTON_LEFT))
+        {
+            if (current_button != NULL && ptr == current_button)
+            {
+                button_set_is_down(current_button, true);
+                button_get_on_down(current_button)();
+            }
+            else if (current_button != NULL && ptr != current_button)
+            {
+                //button_get_on_released(current_button)();
+                current_button = NULL;
+            }
+        }
+        else if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT))
+        {
+            if (current_button != NULL)
+            {
+                button_get_on_released(current_button)();
+                current_button = NULL;
+            }
+        }
     }
+
+    (*(void(**)(float delta))array_get(&function_pointers_scene_update, current_scene_index))(delta);
 }
+
 void game_draw(void)
 {
     BeginTextureMode(render_texture);
@@ -1197,39 +1032,22 @@ void game_draw(void)
 
     if (current_scene_index != -1)
     {
-        for (int i = 0; i < scene_get_sprites_count(&scene); ++i)
-        {
-            struct sprite * sprite = scene_get_sprite(&scene, i);
-            sprite_draw(sprite);
-        }
-
-        for (int i = 0; i < scene_get_buttons_count(&scene); ++i)
-        {
-            struct button * button = scene_get_button(&scene, i);
-            Color color = button_get_is_enabled(button) ? button_get_color(button) : GRAY;
-            DrawRectangle(button_get_x(button), button_get_y(button), button_get_width(button), button_get_height(button), color);
-        }
-
-        function_pointers_scene_draw[current_scene_index]();
+        game_draw_scene();
     }
 
     if (is_draw_mouse)
     {
-        Vector2 mouse_position = GetMousePosition();
-        mouse_position.x += mouse_cursor_offsets[current_mouse_cursor_index].x;
-        mouse_position.y += mouse_cursor_offsets[current_mouse_cursor_index].y;
-        DrawTexture(mouse_cursor_textures[current_mouse_cursor_index], mouse_position.x, mouse_position.y, WHITE);
+        game_draw_mouse();
     }
 
     if (is_scene_transition)
     {
-        DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), scene_transition_color);
+        game_draw_scene_transition();
     }
 
     if (is_draw_debug)
     {
-        DrawRectangle(0, 0, 138, 26, BLACK);
-        DrawText(TextFormat("current_scene_index: %d", current_scene_index), 8, 8, 8, WHITE);
+        game_draw_debug();
     }
 
     EndTextureMode();
@@ -1238,16 +1056,62 @@ void game_draw(void)
 
     ClearBackground(BLACK);
 
+    game_draw_render_texture();
+
+    EndDrawing();
+}
+void game_draw_scene(void)
+{
+    for (int i = 0; i < scene_get_sprites_count(&scene); ++i)
+    {
+        struct sprite * sprite = scene_get_sprite(&scene, i);
+        sprite_draw(sprite);
+    }
+
+    for (int i = 0; i < scene_get_buttons_count(&scene); ++i)
+    {
+        struct button * button = scene_get_button(&scene, i);
+        Color color = button_get_is_enabled(button) ? button_get_color(button) : GRAY;
+        DrawRectangle(button_get_x(button), button_get_y(button), button_get_width(button), button_get_height(button), color);
+    }
+
+    (*(void(**)(void))array_get(&function_pointers_scene_draw, current_scene_index))();
+}
+void game_draw_mouse(void)
+{
+    Vector2 mouse_position = GetMousePosition();
+    mouse_position.x += mouse_cursor_offsets[current_mouse_cursor_index].x;
+    mouse_position.y += mouse_cursor_offsets[current_mouse_cursor_index].y;
+    DrawTexture(mouse_cursor_textures[current_mouse_cursor_index], mouse_position.x, mouse_position.y, WHITE);
+}
+void game_draw_scene_transition(void)
+{
+    DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), scene_transition_color);
+}
+void game_draw_debug(void)
+{
+    DrawRectangle(0, 0, 138, 26, BLACK);
+    DrawText(TextFormat("current_scene_index: %d", current_scene_index), 8, 8, 8, WHITE);
+}
+void game_draw_render_texture(void)
+{
     Rectangle source = (Rectangle){ 0.0f, 0.0f, (float)render_texture.texture.width, -(float)render_texture.texture.height };
     Rectangle dest = (Rectangle){ 0.0f, 0.0f, (float)GetScreenWidth(), (float)GetScreenHeight() };
 
     DrawTexturePro(render_texture.texture, source, dest, (Vector2) { 0.0f, 0.0f }, 0.0f, WHITE);
-
-    EndDrawing();
 }
 
 
 
+void add_scene(void(*scene_init)(void), void(*scene_free)(void), void(*scene_enter)(void), void(*scene_exit)(void), void(*scene_update)(float delta), void(*scene_draw)(void))
+{
+    array_append(&function_pointers_scene_init, &scene_init);
+    array_append(&function_pointers_scene_free, &scene_free);
+    array_append(&function_pointers_scene_enter, &scene_enter);
+    array_append(&function_pointers_scene_exit, &scene_exit);
+    array_append(&function_pointers_scene_update, &scene_update);
+    array_append(&function_pointers_scene_draw, &scene_draw);
+}
 void set_scene(int index)
 {
     printf("set_scene: index=%d\n", index);
@@ -1255,7 +1119,7 @@ void set_scene(int index)
     is_mouse_input_enabled = false;
     next_scene_index = index;
     is_scene_transition = true;
-    scene_transision_state = SCENE_TRANSITION_START;
+    scene_transition_state = SCENE_TRANSITION_START;
 }
 
 
@@ -1296,11 +1160,11 @@ void scene_0000_draw(void)
 
 void scene_0000_on_pressed_button_exit(void)
 {
-    
+
 }
 void scene_0000_on_down_button_exit(void)
 {
-    
+
 }
 void scene_0000_on_released_button_exit(void)
 {
