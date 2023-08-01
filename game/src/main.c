@@ -8,6 +8,8 @@
 #include "scene.h"
 #include "game_data.h"
 
+#include "scene_0000.h"
+
 
 
 enum scene_transision_enum
@@ -22,6 +24,8 @@ enum scene_transision_enum
 };
 
 
+
+bool exit_window;
 
 struct game_data game_data;
 
@@ -83,6 +87,11 @@ void game_draw_render_texture(void);
 void add_scene(void(*scene_init)(void), void(*scene_free)(void), void(*scene_enter)(void), void(*scene_exit)(void), void(*scene_update)(float delta), void(*scene_draw)(void));
 void set_scene(int index);
 
+void add_button(int x, int y, int width, int height, Color color, bool is_enabled, int mouse_cursor_index,
+    void(*on_pressed)(void), void(*on_down)(void), void(*on_released)(void));
+
+void add_sprite(int x, int y, char * texture_filename, Color tint, bool is_visible);
+
 
 
 /* -------- scene_title -------- */
@@ -98,7 +107,6 @@ struct button * scene_title_button_new_game;
 struct button * scene_title_button_load_game;
 struct button * scene_title_button_quit;
 struct button * scene_title_button_options;
-struct button * scene_title_button_other;
 
 void scene_title_init(void);
 void scene_title_free(void);
@@ -115,6 +123,41 @@ void scene_title_on_released_button_quit(void);
 void scene_title_on_released_button_options(void);
 
 /* -------- scene_title -------- */
+
+
+
+/* -------- scene_credits -------- */
+
+struct sprite * scene_credits_sprite_slide_0000;
+struct sprite * scene_credits_sprite_slide_0001;
+struct sprite * scene_credits_sprite_slide_0002;
+struct sprite * scene_credits_sprite_slide_0003;
+struct sprite * scene_credits_sprite_slide_0004;
+struct sprite * scene_credits_sprite_slide_0005;
+struct sprite * scene_credits_sprite_slide_0006;
+
+struct button * scene_credits_button_quit;
+
+float scene_credits_slide_time;
+float scene_credits_slide_timer;
+
+size_t scene_credits_slides_count;
+struct sprite * scene_credits_slides[7];
+
+size_t scene_credits_current_slide_index;
+
+void scene_credits_init(void);
+void scene_credits_free(void);
+
+void scene_credits_enter(void);
+void scene_credits_exit(void);
+
+void scene_credits_update(float delta);
+void scene_credits_draw(void);
+
+void scene_credits_on_released_button_quit(void);
+
+/* -------- scene_credits -------- */
 
 
 
@@ -610,10 +653,13 @@ int main(void)
     //Music music = LoadMusicStream("resources/music_0000.ogg");
     //PlayMusicStream(music);
 
+    exit_window = false;
+
     game_init();
 
-    while (!WindowShouldClose())
+    while (!exit_window)
     {
+        if (IsKeyPressed(KEY_ESCAPE) || WindowShouldClose()) exit_window = true;
         //UpdateMusicStream(music);
 
         float delta = GetFrameTime();
@@ -686,8 +732,8 @@ void game_init(void)
     array_init(&function_pointers_scene_update);
     array_init(&function_pointers_scene_draw);
 
-    printf("");
-
+    add_scene(scene_title_init, scene_title_free, scene_title_enter, scene_title_exit, scene_title_update, scene_title_draw);
+    add_scene(scene_credits_init, scene_credits_free, scene_credits_enter, scene_credits_exit, scene_credits_update, scene_credits_draw);
     add_scene(scene_0000_init, scene_0000_free, scene_0000_enter, scene_0000_exit, scene_0000_update, scene_0000_draw);
     add_scene(scene_0001_init, scene_0001_free, scene_0001_enter, scene_0001_exit, scene_0001_update, scene_0001_draw);
     add_scene(scene_0002_init, scene_0002_free, scene_0002_enter, scene_0002_exit, scene_0002_update, scene_0002_draw);
@@ -706,7 +752,6 @@ void game_init(void)
     add_scene(scene_0015_init, scene_0015_free, scene_0015_enter, scene_0015_exit, scene_0015_update, scene_0015_draw);
     add_scene(scene_0016_init, scene_0016_free, scene_0016_enter, scene_0016_exit, scene_0016_update, scene_0016_draw);
     add_scene(scene_0017_init, scene_0017_free, scene_0017_enter, scene_0017_exit, scene_0017_update, scene_0017_draw);
-    add_scene(scene_title_init, scene_title_free, scene_title_enter, scene_title_exit, scene_title_update, scene_title_draw);
 
     is_draw_debug = true;
 
@@ -1143,7 +1188,7 @@ void scene_title_on_released_button_load_game(void)
 
 void scene_title_on_released_button_quit(void)
 {
-
+    set_scene(19);
 }
 
 void scene_title_on_released_button_options(void)
@@ -1152,6 +1197,114 @@ void scene_title_on_released_button_options(void)
 }
 
 /* -------- scene_title -------- */
+
+
+
+/* -------- scene_credits -------- */
+
+void scene_credits_init(void)
+{
+    scene_add_sprite(&scene, 0, 0, "resources/scene_credits/slide_0000.png", WHITE, true);
+    scene_add_sprite(&scene, 0, 0, "resources/scene_credits/slide_0001.png", WHITE, false);
+    scene_add_sprite(&scene, 0, 0, "resources/scene_credits/slide_0002.png", WHITE, false);
+    scene_add_sprite(&scene, 0, 0, "resources/scene_credits/slide_0003.png", WHITE, false);
+    scene_add_sprite(&scene, 0, 0, "resources/scene_credits/slide_0004.png", WHITE, false);
+    scene_add_sprite(&scene, 0, 0, "resources/scene_credits/slide_0005.png", WHITE, false);
+    scene_add_sprite(&scene, 0, 0, "resources/scene_credits/slide_0006.png", WHITE, false);
+
+    scene_add_button(&scene, 0, 0, 544, 332, BLANK, true, 1,
+        NULL, NULL, scene_credits_on_released_button_quit);
+
+    scene_credits_slide_time = 0.0f;
+    scene_credits_slide_timer = 0.0f;
+
+    scene_credits_slides_count = 0;
+
+    scene_credits_current_slide_index = 0;
+}
+void scene_credits_free(void)
+{
+
+}
+
+void scene_credits_enter(void)
+{
+    scene_credits_sprite_slide_0000 = scene_get_sprite(&scene, 0);
+    scene_credits_sprite_slide_0001 = scene_get_sprite(&scene, 1);
+    scene_credits_sprite_slide_0002 = scene_get_sprite(&scene, 2);
+    scene_credits_sprite_slide_0003 = scene_get_sprite(&scene, 3);
+    scene_credits_sprite_slide_0004 = scene_get_sprite(&scene, 4);
+    scene_credits_sprite_slide_0005 = scene_get_sprite(&scene, 5);
+    scene_credits_sprite_slide_0006 = scene_get_sprite(&scene, 6);
+
+    scene_credits_button_quit = scene_get_button(&scene, 0);
+
+    scene_credits_slide_time = 5.0f;
+    scene_credits_slide_timer = 0.0f;
+
+    scene_credits_slides_count = 7;
+    for (int i = 0; i < scene_credits_slides_count; ++i)
+    {
+        scene_credits_slides[i] = scene_get_sprite(&scene, i);
+    }
+
+    scene_credits_current_slide_index = 0;
+}
+void scene_credits_exit(void)
+{
+    scene_credits_sprite_slide_0000 = NULL;
+    scene_credits_sprite_slide_0001 = NULL;
+    scene_credits_sprite_slide_0002 = NULL;
+    scene_credits_sprite_slide_0003 = NULL;
+    scene_credits_sprite_slide_0004 = NULL;
+    scene_credits_sprite_slide_0005 = NULL;
+    scene_credits_sprite_slide_0006 = NULL;
+
+    scene_credits_button_quit = NULL;
+
+    scene_credits_slide_time = 0.0f;
+    scene_credits_slide_timer = 0.0f;
+
+    for (int i = 0; i < scene_credits_slides_count; ++i)
+    {
+        scene_credits_slides[i] = NULL;
+    }
+    scene_credits_slides_count = 0;
+
+    scene_credits_current_slide_index = 0;
+}
+
+void scene_credits_update(float delta)
+{
+    scene_credits_slide_timer += delta;
+    if (scene_credits_slide_timer >= scene_credits_slide_time)
+    {
+        scene_credits_slide_timer = 0.0f;
+        sprite_toggle_is_visible(scene_credits_slides[scene_credits_current_slide_index]);
+
+        if (++scene_credits_current_slide_index < scene_credits_slides_count)
+        {
+            sprite_toggle_is_visible(scene_credits_slides[scene_credits_current_slide_index]);
+        }
+        else
+        {
+            set_scene(-1);
+            exit_window = true;
+        }
+    }
+}
+void scene_credits_draw(void)
+{
+    ClearBackground(BLACK);
+}
+
+void scene_credits_on_released_button_quit(void)
+{
+    set_scene(-1);
+    exit_window = true;
+}
+
+/* -------- scene_credits -------- */
 
 
 
