@@ -4,9 +4,10 @@
 
 
 
-struct button button_create(int x, int y, int width, int height, Color color, bool is_enabled, int mouse_cursor_index, void(*on_pressed)(void))
+struct button button_create(int x, int y, int width, int height, Color color, bool is_enabled, int mouse_cursor_index,
+    void(*on_pressed)(void), void(*on_down)(void), void(*on_released)(void))
 {
-    return (struct button) { x, y, width, height, color, is_enabled, mouse_cursor_index, on_pressed };
+    return (struct button) { x, y, width, height, color, is_enabled, mouse_cursor_index, false, false, false, false, on_pressed, on_down, on_released };
 }
 
 
@@ -46,9 +47,39 @@ int button_get_mouse_cursor_index(struct button * button)
     return button->mouse_cursor_index;
 }
 
+bool button_get_was_mouse_over(struct button * button)
+{
+    return button->was_mouse_over;
+}
+
+bool button_get_is_mouse_over(struct button * button)
+{
+    return button->is_mouse_over;
+}
+
+bool button_get_was_down(struct button * button)
+{
+    return button->was_down;
+}
+
+bool button_get_is_down(struct button * button)
+{
+    return button->is_down;
+}
+
 void (*button_get_on_pressed(struct button * button))(void)
 {
     return button->on_pressed;
+}
+
+void (*button_get_on_down(struct button * button))(void)
+{
+    return button->on_down;
+}
+
+void (*button_get_on_released(struct button * button))(void)
+{
+    return button->on_released;
 }
 
 
@@ -100,9 +131,39 @@ void button_set_mouse_cursor_index(struct button * button, int mouse_cursor_inde
     button->mouse_cursor_index = mouse_cursor_index;
 }
 
+void button_set_was_mouse_over(struct button * button, bool was_mouse_over)
+{
+    button->was_mouse_over = was_mouse_over;
+}
+
+void button_set_is_mouse_over(struct button * button, bool is_mouse_over)
+{
+    button->is_mouse_over = is_mouse_over;
+}
+
+void button_set_was_down(struct button * button, bool was_down)
+{
+    button->was_down = was_down;
+}
+
+void button_set_is_down(struct button * button, bool is_down)
+{
+    button->is_down = is_down;
+}
+
 void button_set_on_pressed(struct button * button, void(*on_pressed)(void))
 {
     button->on_pressed = on_pressed;
+}
+
+void button_set_on_down(struct button * button, void(*on_down)(void))
+{
+    button->on_pressed = on_down;
+}
+
+void button_set_on_released(struct button * button, void(*on_released)(void))
+{
+    button->on_released = on_released;
 }
 
 

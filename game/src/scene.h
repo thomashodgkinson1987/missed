@@ -30,7 +30,8 @@ struct sprite * scene_add_sprite(struct scene * scene, int x, int y, char * text
 struct sprite * scene_get_sprite(struct scene * scene, size_t index);
 size_t scene_get_sprites_count(struct scene * scene);
 
-struct button * scene_add_button(struct scene * scene, int x, int y, int width, int height, Color color, bool is_enabled, int mouse_cursor_index, void(*on_pressed)(void));
+struct button * scene_add_button(struct scene * scene, int x, int y, int width, int height, Color color, bool is_enabled, int mouse_cursor_index,
+    void(*on_pressed)(void), void(*on_down)(void), void(*on_released)(void));
 struct button * scene_get_button(struct scene * scene, size_t index);
 size_t scene_get_buttons_count(struct scene * scene);
 

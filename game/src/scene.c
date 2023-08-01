@@ -110,9 +110,10 @@ size_t scene_get_sprites_count(struct scene * scene)
 
 
 
-struct button * scene_add_button(struct scene * scene, int x, int y, int width, int height, Color color, bool is_enabled, int mouse_cursor_index, void(*on_pressed)(void))
+struct button * scene_add_button(struct scene * scene, int x, int y, int width, int height, Color color, bool is_enabled, int mouse_cursor_index,
+    void(*on_pressed)(void), void(*on_down)(void), void(*on_released)(void))
 {
-    struct button button = button_create(x, y, width, height, color, is_enabled, mouse_cursor_index, on_pressed);
+    struct button button = button_create(x, y, width, height, color, is_enabled, mouse_cursor_index, on_pressed, on_down, on_released);
     array_append(&scene->buttons, &button);
     return (struct button *)array_get(&scene->buttons, array_get_count(&scene->buttons) - 1);
 }
