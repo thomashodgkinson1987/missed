@@ -11,6 +11,7 @@
 #include "scene_0000.h"
 #include "scene_0001.h"
 #include "scene_0002.h"
+#include "scene_0003.h"
 
 
 
@@ -89,7 +90,7 @@ void game_draw_render_texture(void);
 
 
 void add_scene(
-    void(*scene_init)(struct scene * scene, void(*set_scene)(int index)),
+    void(*scene_init)(struct scene * scene, struct game_data * game_data, void(*set_scene)(int index)),
     void(*scene_free)(void),
     void(*scene_load)(void),
     void(*scene_unload)(void),
@@ -169,15 +170,15 @@ void game_init(void)
 
     is_scene_transition = true;
     scene_transition_state = SCENE_TRANSITION_RUN;
-    scene_transition_fade_out_time = 0.0f;
-    scene_transition_wait_time = 0.0f;
-    scene_transition_fade_in_time = 0.0f;
+    scene_transition_fade_out_time = 0.5f;
+    scene_transition_wait_time = 0.5f;
+    scene_transition_fade_in_time = 0.5f;
     scene_transition_timer = 0.0f;
     scene_transition_color = BLACK;
 
     scene = (struct scene){ 0 };
 
-    function_pointers_scene_init = array_create(1, sizeof(void(*)(struct scene * scene, void(*set_scene)(int))));
+    function_pointers_scene_init = array_create(1, sizeof(void(*)(struct scene * scene, struct game_data * game_data, void(*set_scene)(int))));
     function_pointers_scene_free = array_create(1, sizeof(void(*)(void)));
     function_pointers_scene_load = array_create(1, sizeof(void(*)(void)));
     function_pointers_scene_unload = array_create(1, sizeof(void(*)(void)));
@@ -198,6 +199,7 @@ void game_init(void)
     add_scene(scene_0000_init, scene_0000_free, scene_0000_load, scene_0000_unload, scene_0000_enter, scene_0000_exit, scene_0000_update, scene_0000_draw);
     add_scene(scene_0001_init, scene_0001_free, scene_0001_load, scene_0001_unload, scene_0001_enter, scene_0001_exit, scene_0001_update, scene_0001_draw);
     add_scene(scene_0002_init, scene_0002_free, scene_0002_load, scene_0002_unload, scene_0002_enter, scene_0002_exit, scene_0002_update, scene_0002_draw);
+    add_scene(scene_0003_init, scene_0003_free, scene_0003_load, scene_0003_unload, scene_0003_enter, scene_0003_exit, scene_0003_update, scene_0003_draw);
 
     is_draw_debug = true;
 
@@ -339,7 +341,7 @@ void game_update_scene_transition(float delta)
         {
             scene = scene_create();
             scene_init(&scene);
-            (*(void(**)(struct scene * scene, void(*set_scene)(int)))array_get(&function_pointers_scene_init, current_scene_index))(&scene, set_scene);
+            (*(void(**)(struct scene * scene, struct game_data * game_data, void(*set_scene)(int)))array_get(&function_pointers_scene_init, current_scene_index))(&scene, &game_data, set_scene);
             (*(void(**)(void))array_get(&function_pointers_scene_load, current_scene_index))();
             (*(void(**)(void))array_get(&function_pointers_scene_enter, current_scene_index))();
         }
@@ -505,7 +507,7 @@ void game_draw_scene(void)
     for (int i = 0; i < scene_get_buttons_count(&scene); ++i)
     {
         struct button * button = scene_get_button(&scene, i);
-        Color color = button_get_is_enabled(button) ? button_get_color(button) : GRAY;
+        Color color = button_get_color(button);
         DrawRectangle(button_get_x(button), button_get_y(button), button_get_width(button), button_get_height(button), color);
     }
 
@@ -538,7 +540,7 @@ void game_draw_render_texture(void)
 
 
 void add_scene(
-    void(*scene_init)(struct scene * scene, void(*set_scene)(int index)),
+    void(*scene_init)(struct scene * scene, struct game_data * game_data, void(*set_scene)(int index)),
     void(*scene_free)(void),
     void(*scene_load)(void),
     void(*scene_unload)(void),

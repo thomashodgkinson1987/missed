@@ -14,6 +14,7 @@ struct scene scene_create(void)
     scene.elapsed_time = 0.0f;
     scene.sprites = array_create(1, sizeof(struct sprite));
     scene.buttons = array_create(1, sizeof(struct button));
+    scene.sounds = array_create(1, sizeof(Sound));
 
     return scene;
 }
@@ -22,6 +23,7 @@ void scene_init(struct scene * scene)
 {
     array_init(&scene->sprites);
     array_init(&scene->buttons);
+    array_init(&scene->sounds);
 }
 
 void scene_free(struct scene * scene)
@@ -38,6 +40,14 @@ void scene_free(struct scene * scene)
 
     array_free(&scene->buttons);
     scene->buttons = (struct array){ 0 };
+
+    for (int i = 0; i < array_get_count(&scene->sounds); ++i)
+    {
+        Sound * sound = (Sound *)array_get(&scene->sounds, i);
+        UnloadSound(*sound);
+    }
+    array_free(&scene->sounds);
+    scene->sounds = (struct array){ 0 };
 }
 
 void scene_reset(struct scene * scene)
@@ -54,31 +64,11 @@ float scene_get_elapsed_time(struct scene * scene)
     return scene->elapsed_time;
 }
 
-struct array * scene_get_sprites(struct scene * scene)
-{
-    return &scene->sprites;
-}
-
-struct array * scene_get_buttons(struct scene * scene)
-{
-    return &scene->buttons;
-}
-
 
 
 void scene_set_elapsed_time(struct scene * scene, float elapsed_time)
 {
     scene->elapsed_time = elapsed_time;
-}
-
-void scene_set_sprites(struct scene * scene, struct array sprites)
-{
-    scene->sprites = sprites;
-}
-
-void scene_set_buttons(struct scene * scene, struct array buttons)
-{
-    scene->buttons = buttons;
 }
 
 
@@ -124,4 +114,22 @@ struct button * scene_get_button(struct scene * scene, size_t index)
 size_t scene_get_buttons_count(struct scene * scene)
 {
     return array_get_count(&scene->buttons);
+}
+
+
+
+void scene_add_sound(struct scene * scene, char * sound_filename)
+{
+    Sound sound = LoadSound(sound_filename);
+    array_append(&scene->sounds, &sound);
+}
+
+Sound * scene_get_sound(struct scene * scene, size_t index)
+{
+    return (Sound *)array_get(&scene->sounds, index);
+}
+
+size_t scene_get_sounds_count(struct scene * scene)
+{
+    return array_get_count(&scene->sounds);
 }

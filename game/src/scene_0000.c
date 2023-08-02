@@ -1,9 +1,12 @@
+#include <stdio.h>
 #include "scene_0000.h"
 #include "scene.h"
+#include "game_data.h"
 #include "sprite.h"
 #include "button.h"
 
 static struct scene * scene;
+static struct game_data * game_data;
 static void(*set_scene)(int index);
 
 static struct sprite * sprite_background;
@@ -18,25 +21,27 @@ static struct button * button_load_game;
 static struct button * button_quit;
 static struct button * button_options;
 
-void scene_0000_init(struct scene * scene_ptr, void(*set_scene_ptr)(int index))
+void scene_0000_init(struct scene * scene_ptr, struct game_data * game_data_ptr, void(*set_scene_ptr)(int index))
 {
     scene = scene_ptr;
+    game_data = game_data_ptr;
     set_scene = set_scene_ptr;
 }
 void scene_0000_free(void)
 {
     scene = NULL;
+    game_data = NULL;
     set_scene = NULL;
 }
 
 void scene_0000_load(void)
 {
-    scene_add_sprite(scene, 0, 0, "resources/title_screen/background.png", WHITE, true);
+    scene_add_sprite(scene, 0, 0, "resources/scene_0000/background.png", WHITE, true);
 
-    scene_add_sprite(scene, 446, 249, "resources/title_screen/new_game_over.png", WHITE, false);
-    scene_add_sprite(scene, 439, 266, "resources/title_screen/load_game_over.png", WHITE, false);
-    scene_add_sprite(scene, 493, 317, "resources/title_screen/quit_over.png", WHITE, false);
-    scene_add_sprite(scene, 10, 310, "resources/title_screen/options_over.png", WHITE, false);
+    scene_add_sprite(scene, 446, 249, "resources/scene_0000/new_game_over.png", WHITE, false);
+    scene_add_sprite(scene, 439, 266, "resources/scene_0000/load_game_over.png", WHITE, false);
+    scene_add_sprite(scene, 493, 317, "resources/scene_0000/quit_over.png", WHITE, false);
+    scene_add_sprite(scene, 10, 310, "resources/scene_0000/options_over.png", WHITE, false);
 
     scene_add_button(scene, 446, 249, 87, 12, BLANK, true, 1,
         NULL, NULL, on_released_button_new_game);
@@ -71,17 +76,7 @@ void scene_0000_enter(void)
 }
 void scene_0000_exit(void)
 {
-    sprite_background = NULL;
 
-    sprite_new_game_over = NULL;
-    sprite_load_game_over = NULL;
-    sprite_quit_over = NULL;
-    sprite_options_over = NULL;
-
-    button_new_game = NULL;
-    button_load_game = NULL;
-    button_quit = NULL;
-    button_options = NULL;
 }
 
 void scene_0000_update(float delta)

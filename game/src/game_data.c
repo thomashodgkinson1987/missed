@@ -349,6 +349,88 @@ Color game_data_get_color(struct game_data * game_data, char * key)
 
 
 
+bool game_data_get_bool_default(struct game_data * game_data, char * key, bool default_value)
+{
+    for (int i = 0; i < array_get_count(&game_data->array_bool); ++i)
+    {
+        struct game_data_entry_bool * entry = (struct game_data_entry_bool *)array_get(&game_data->array_bool, i);
+        if (strcmp(key, entry->key) == 0)
+        {
+            return entry->value;
+        }
+    }
+
+    game_data_add_bool(game_data, key, default_value);
+
+    return default_value;
+}
+
+int game_data_get_int_default(struct game_data * game_data, char * key, int default_value)
+{
+    for (int i = 0; i < array_get_count(&game_data->array_int); ++i)
+    {
+        struct game_data_entry_int * entry = (struct game_data_entry_int *)array_get(&game_data->array_int, i);
+        if (strcmp(key, entry->key) == 0)
+        {
+            return entry->value;
+        }
+    }
+
+    game_data_add_int(game_data, key, default_value);
+
+    return default_value;
+}
+
+float game_data_get_float_default(struct game_data * game_data, char * key, float default_value)
+{
+    for (int i = 0; i < array_get_count(&game_data->array_float); ++i)
+    {
+        struct game_data_entry_float * entry = (struct game_data_entry_float *)array_get(&game_data->array_float, i);
+        if (strcmp(key, entry->key) == 0)
+        {
+            return entry->value;
+        }
+    }
+
+    game_data_add_float(game_data, key, default_value);
+
+    return default_value;
+}
+
+char * game_data_get_string_default(struct game_data * game_data, char * key, char * default_value)
+{
+    for (int i = 0; i < array_get_count(&game_data->array_string); ++i)
+    {
+        struct game_data_entry_string * entry = (struct game_data_entry_string *)array_get(&game_data->array_string, i);
+        if (strcmp(key, entry->key) == 0)
+        {
+            return entry->value;
+        }
+    }
+
+    game_data_add_string(game_data, key, default_value);
+
+    return default_value;
+}
+
+Color game_data_get_color_default(struct game_data * game_data, char * key, Color default_value)
+{
+    for (int i = 0; i < array_get_count(&game_data->array_color); ++i)
+    {
+        struct game_data_entry_color * entry = (struct game_data_entry_color *)array_get(&game_data->array_color, i);
+        if (strcmp(key, entry->key) == 0)
+        {
+            return entry->value;
+        }
+    }
+
+    game_data_add_color(game_data, key, default_value);
+
+    return default_value;
+}
+
+
+
 void game_data_set_bool(struct game_data * game_data, char * key, bool value)
 {
     for (int i = 0; i < array_get_count(&game_data->array_bool); ++i)

@@ -1,23 +1,27 @@
 #include "scene_0002.h"
 #include "scene.h"
+#include "game_data.h"
 #include "sprite.h"
 #include "button.h"
 
 static struct scene * scene;
+static struct game_data * game_data;
 static void(*set_scene)(int index);
 
 static struct sprite * sprite_background;
 
 static struct button * button_exit;
 
-void scene_0002_init(struct scene * scene_ptr, void(*set_scene_ptr)(int index))
+void scene_0002_init(struct scene * scene_ptr, struct game_data * game_data_ptr, void(*set_scene_ptr)(int index))
 {
     scene = scene_ptr;
+    game_data = game_data_ptr;
     set_scene = set_scene_ptr;
 }
 void scene_0002_free(void)
 {
     scene = NULL;
+    game_data = NULL;
     set_scene = NULL;
 }
 
@@ -34,15 +38,13 @@ void scene_0002_unload(void)
 
 void scene_0002_enter(void)
 {
-    button_exit = scene_get_button(scene, 0);
-
     sprite_background = scene_get_sprite(scene, 0);
+
+    button_exit = scene_get_button(scene, 0);
 }
 void scene_0002_exit(void)
 {
-    button_exit = NULL;
-
-    sprite_background = NULL;
+    
 }
 
 void scene_0002_update(float delta)

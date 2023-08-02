@@ -68,6 +68,12 @@ float game_data_get_float(struct game_data * game_data, char * key);
 char * game_data_get_string(struct game_data * game_data, char * key);
 Color game_data_get_color(struct game_data * game_data, char * key);
 
+bool game_data_get_bool_default(struct game_data * game_data, char * key, bool default_value);
+int game_data_get_int_default(struct game_data * game_data, char * key, int default_value);
+float game_data_get_float_default(struct game_data * game_data, char * key, float default_value);
+char * game_data_get_string_default(struct game_data * game_data, char * key, char * default_value);
+Color game_data_get_color_default(struct game_data * game_data, char * key, Color default_value);
+
 void game_data_set_bool(struct game_data * game_data, char * key, bool value);
 void game_data_set_int(struct game_data * game_data, char * key, int value);
 void game_data_set_float(struct game_data * game_data, char * key, float value);

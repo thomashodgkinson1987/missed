@@ -4,7 +4,7 @@
 #include "raylib.h"
 #include "scene.h"
 
-void scene_0002_init(struct scene * scene_ptr, void(*set_scene_ptr)(int index));
+void scene_0002_init(struct scene * scene_ptr, struct game_data * game_data_ptr, void(*set_scene_ptr)(int index));
 void scene_0002_free(void);
 
 void scene_0002_load(void);
