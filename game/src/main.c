@@ -463,8 +463,7 @@ void game_draw_scene(void)
     for (int i = 0; i < scene_get_buttons_count(&scene); ++i)
     {
         struct button * button = scene_get_button_from_index(&scene, i);
-        Color color = button_get_color(button);
-        DrawRectangle(button_get_x(button), button_get_y(button), button_get_width(button), button_get_height(button), color);
+        DrawRectangle(button_get_x(button), button_get_y(button), button_get_width(button), button_get_height(button), button_get_color(button));
     }
 
     ((struct scene_function_pointers *)array_get(&array_scene_function_pointers, current_scene_index))->scene_draw();
