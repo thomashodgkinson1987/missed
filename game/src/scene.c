@@ -121,6 +121,8 @@ struct sprite * scene_get_sprite_from_name(struct scene * scene, char * name)
             return (struct sprite *)array_get(&scene->sprites, i);
         }
     }
+
+    return NULL;
 }
 
 size_t scene_get_sprites_count(struct scene * scene)
@@ -156,6 +158,8 @@ struct button * scene_get_button_from_name(struct scene * scene, char * name)
             return (struct button *)array_get(&scene->buttons, i);
         }
     }
+
+    return NULL;
 }
 
 size_t scene_get_buttons_count(struct scene * scene)
@@ -190,6 +194,8 @@ Sound * scene_get_sound_from_name(struct scene * scene, char * name)
             return (Sound *)array_get(&scene->sounds, i);
         }
     }
+
+    return NULL;
 }
 
 size_t scene_get_sounds_count(struct scene * scene)
