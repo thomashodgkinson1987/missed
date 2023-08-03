@@ -1,12 +1,12 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include <math.h>
 #include "raylib.h"
 #include "array.h"
 #include "button.h"
 #include "sprite.h"
 #include "scene.h"
 #include "game_data.h"
+#include "scene_function_pointers.h"
 
 #include "scene_0000.h"
 #include "scene_0001.h"
@@ -34,7 +34,7 @@ struct game_data game_data;
 
 float elapsed_time;
 
-bool is_mouse_input_enabled;
+bool is_enabled_mouse;
 bool is_draw_mouse;
 
 Texture2D mouse_cursor_textures[5];
@@ -57,14 +57,7 @@ bool is_draw_debug;
 
 struct scene scene;
 
-struct array function_pointers_scene_init;
-struct array function_pointers_scene_free;
-struct array function_pointers_scene_load;
-struct array function_pointers_scene_unload;
-struct array function_pointers_scene_enter;
-struct array function_pointers_scene_exit;
-struct array function_pointers_scene_update;
-struct array function_pointers_scene_draw;
+struct array array_scene_function_pointers;
 
 RenderTexture2D render_texture;
 
@@ -89,15 +82,7 @@ void game_draw_render_texture(void);
 
 
 
-void add_scene(
-    void(*scene_init)(struct scene * scene, struct game_data * game_data, void(*set_scene)(int index)),
-    void(*scene_free)(void),
-    void(*scene_load)(void),
-    void(*scene_unload)(void),
-    void(*scene_enter)(void),
-    void(*scene_exit)(void),
-    void(*scene_update)(float delta),
-    void(*scene_draw)(void));
+void add_scene(struct scene_function_pointers scene_function_pointers);
 void set_scene(int index);
 
 
@@ -148,7 +133,7 @@ void game_init(void)
 
     elapsed_time = 0.0f;
 
-    is_mouse_input_enabled = false;
+    is_enabled_mouse = false;
     is_draw_mouse = true;
 
     mouse_cursor_textures[0] = LoadTexture("resources/mouse_cursor/0000.png");
@@ -178,30 +163,15 @@ void game_init(void)
 
     scene = (struct scene){ 0 };
 
-    function_pointers_scene_init = array_create(1, sizeof(void(*)(struct scene * scene, struct game_data * game_data, void(*set_scene)(int))));
-    function_pointers_scene_free = array_create(1, sizeof(void(*)(void)));
-    function_pointers_scene_load = array_create(1, sizeof(void(*)(void)));
-    function_pointers_scene_unload = array_create(1, sizeof(void(*)(void)));
-    function_pointers_scene_enter = array_create(1, sizeof(void(*)(void)));
-    function_pointers_scene_exit = array_create(1, sizeof(void(*)(void)));
-    function_pointers_scene_update = array_create(1, sizeof(void(*)(float delta)));
-    function_pointers_scene_draw = array_create(1, sizeof(void(*)(void)));
+    array_scene_function_pointers = array_create(1, sizeof(struct scene_function_pointers));
+    array_init(&array_scene_function_pointers);
 
-    array_init(&function_pointers_scene_init);
-    array_init(&function_pointers_scene_free);
-    array_init(&function_pointers_scene_load);
-    array_init(&function_pointers_scene_unload);
-    array_init(&function_pointers_scene_enter);
-    array_init(&function_pointers_scene_exit);
-    array_init(&function_pointers_scene_update);
-    array_init(&function_pointers_scene_draw);
+    add_scene(scene_0000_get_function_pointers());
+    add_scene(scene_0001_get_function_pointers());
+    add_scene(scene_0002_get_function_pointers());
+    add_scene(scene_0003_get_function_pointers());
 
-    add_scene(scene_0000_init, scene_0000_free, scene_0000_load, scene_0000_unload, scene_0000_enter, scene_0000_exit, scene_0000_update, scene_0000_draw);
-    add_scene(scene_0001_init, scene_0001_free, scene_0001_load, scene_0001_unload, scene_0001_enter, scene_0001_exit, scene_0001_update, scene_0001_draw);
-    add_scene(scene_0002_init, scene_0002_free, scene_0002_load, scene_0002_unload, scene_0002_enter, scene_0002_exit, scene_0002_update, scene_0002_draw);
-    add_scene(scene_0003_init, scene_0003_free, scene_0003_load, scene_0003_unload, scene_0003_enter, scene_0003_exit, scene_0003_update, scene_0003_draw);
-
-    is_draw_debug = true;
+    is_draw_debug = false;
 
     render_texture = LoadRenderTexture(544, 332);
 
@@ -213,8 +183,9 @@ void game_free(void)
 
     if (current_scene_index != -1)
     {
-        (*(void(**)(void))array_get(&function_pointers_scene_exit, current_scene_index))();
-        (*(void(**)(void))array_get(&function_pointers_scene_free, current_scene_index))();
+        ((struct scene_function_pointers *)array_get(&array_scene_function_pointers, current_scene_index))->scene_exit();
+        ((struct scene_function_pointers *)array_get(&array_scene_function_pointers, current_scene_index))->scene_unload();
+        ((struct scene_function_pointers *)array_get(&array_scene_function_pointers, current_scene_index))->scene_free();
         scene_free(&scene);
         scene = (struct scene){ 0 };
     }
@@ -224,7 +195,7 @@ void game_free(void)
 
     elapsed_time = 0.0f;
 
-    is_mouse_input_enabled = false;
+    is_enabled_mouse = false;
     is_draw_mouse = false;
 
     for (int i = 0; i < 4; ++i)
@@ -248,23 +219,8 @@ void game_free(void)
 
     scene = (struct scene){ 0 };
 
-    array_free(&function_pointers_scene_init);
-    array_free(&function_pointers_scene_free);
-    array_free(&function_pointers_scene_load);
-    array_free(&function_pointers_scene_unload);
-    array_free(&function_pointers_scene_enter);
-    array_free(&function_pointers_scene_exit);
-    array_free(&function_pointers_scene_update);
-    array_free(&function_pointers_scene_draw);
-
-    function_pointers_scene_init = (struct array){ 0 };
-    function_pointers_scene_free = (struct array){ 0 };
-    function_pointers_scene_load = (struct array){ 0 };
-    function_pointers_scene_unload = (struct array){ 0 };
-    function_pointers_scene_enter = (struct array){ 0 };
-    function_pointers_scene_exit = (struct array){ 0 };
-    function_pointers_scene_update = (struct array){ 0 };
-    function_pointers_scene_draw = (struct array){ 0 };
+    array_free(&array_scene_function_pointers);
+    array_scene_function_pointers = (struct array){ 0 };
 
     is_draw_debug = false;
 
@@ -329,9 +285,9 @@ void game_update_scene_transition(float delta)
     {
         if (current_scene_index != -1)
         {
-            (*(void(**)(void))array_get(&function_pointers_scene_exit, current_scene_index))();
-            (*(void(**)(void))array_get(&function_pointers_scene_unload, current_scene_index))();
-            (*(void(**)(void))array_get(&function_pointers_scene_free, current_scene_index))();
+            ((struct scene_function_pointers *)array_get(&array_scene_function_pointers, current_scene_index))->scene_exit();
+            ((struct scene_function_pointers *)array_get(&array_scene_function_pointers, current_scene_index))->scene_unload();
+            ((struct scene_function_pointers *)array_get(&array_scene_function_pointers, current_scene_index))->scene_free();
             scene_free(&scene);
             scene = (struct scene){ 0 };
         }
@@ -341,9 +297,9 @@ void game_update_scene_transition(float delta)
         {
             scene = scene_create();
             scene_init(&scene);
-            (*(void(**)(struct scene * scene, struct game_data * game_data, void(*set_scene)(int)))array_get(&function_pointers_scene_init, current_scene_index))(&scene, &game_data, set_scene);
-            (*(void(**)(void))array_get(&function_pointers_scene_load, current_scene_index))();
-            (*(void(**)(void))array_get(&function_pointers_scene_enter, current_scene_index))();
+            ((struct scene_function_pointers *)array_get(&array_scene_function_pointers, current_scene_index))->scene_init(&scene, &game_data, set_scene);
+            ((struct scene_function_pointers *)array_get(&array_scene_function_pointers, current_scene_index))->scene_load();
+            ((struct scene_function_pointers *)array_get(&array_scene_function_pointers, current_scene_index))->scene_enter();
         }
         scene_transition_state = SCENE_TRANSITION_WAIT;
     }
@@ -372,7 +328,7 @@ void game_update_scene_transition(float delta)
     }
     if (scene_transition_state == SCENE_TRANSITION_END)
     {
-        is_mouse_input_enabled = true;
+        is_enabled_mouse = true;
         is_scene_transition = false;
         scene_transition_state = SCENE_TRANSITION_IDLE;
     }
@@ -383,7 +339,7 @@ void game_update_scene(float delta)
 
     current_mouse_cursor_index = 1;
 
-    if (is_mouse_input_enabled)
+    if (is_enabled_mouse)
     {
         Vector2 mouse_position = GetMousePosition();
 
@@ -391,7 +347,7 @@ void game_update_scene(float delta)
 
         for (int i = 0; i < scene_get_buttons_count(&scene); ++i)
         {
-            struct button * button = scene_get_button(&scene, i);
+            struct button * button = scene_get_button_from_index(&scene, i);
 
             if (!button_get_is_enabled(button))
             {
@@ -457,7 +413,7 @@ void game_update_scene(float delta)
         }
     }
 
-    (*(void(**)(float delta))array_get(&function_pointers_scene_update, current_scene_index))(delta);
+    ((struct scene_function_pointers *)array_get(&array_scene_function_pointers, current_scene_index))->scene_update(delta);
 }
 
 void game_draw(void)
@@ -500,18 +456,18 @@ void game_draw_scene(void)
 {
     for (int i = 0; i < scene_get_sprites_count(&scene); ++i)
     {
-        struct sprite * sprite = scene_get_sprite(&scene, i);
+        struct sprite * sprite = scene_get_sprite_from_index(&scene, i);
         sprite_draw(sprite);
     }
 
     for (int i = 0; i < scene_get_buttons_count(&scene); ++i)
     {
-        struct button * button = scene_get_button(&scene, i);
+        struct button * button = scene_get_button_from_index(&scene, i);
         Color color = button_get_color(button);
         DrawRectangle(button_get_x(button), button_get_y(button), button_get_width(button), button_get_height(button), color);
     }
 
-    (*(void(**)(void))array_get(&function_pointers_scene_draw, current_scene_index))();
+    ((struct scene_function_pointers *)array_get(&array_scene_function_pointers, current_scene_index))->scene_draw();
 }
 void game_draw_mouse(void)
 {
@@ -539,31 +495,16 @@ void game_draw_render_texture(void)
 
 
 
-void add_scene(
-    void(*scene_init)(struct scene * scene, struct game_data * game_data, void(*set_scene)(int index)),
-    void(*scene_free)(void),
-    void(*scene_load)(void),
-    void(*scene_unload)(void),
-    void(*scene_enter)(void),
-    void(*scene_exit)(void),
-    void(*scene_update)(float delta),
-    void(*scene_draw)(void))
+void add_scene(struct scene_function_pointers scene_function_pointers)
 {
-    array_append(&function_pointers_scene_init, &scene_init);
-    array_append(&function_pointers_scene_free, &scene_free);
-    array_append(&function_pointers_scene_load, &scene_load);
-    array_append(&function_pointers_scene_unload, &scene_unload);
-    array_append(&function_pointers_scene_enter, &scene_enter);
-    array_append(&function_pointers_scene_exit, &scene_exit);
-    array_append(&function_pointers_scene_update, &scene_update);
-    array_append(&function_pointers_scene_draw, &scene_draw);
+    array_append(&array_scene_function_pointers, &scene_function_pointers);
 }
 
 void set_scene(int index)
 {
     printf("set_scene: index=%d\n", index);
 
-    is_mouse_input_enabled = false;
+    is_enabled_mouse = false;
     next_scene_index = index;
     is_scene_transition = true;
     scene_transition_state = SCENE_TRANSITION_START;
