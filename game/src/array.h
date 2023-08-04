@@ -1,7 +1,9 @@
 #ifndef ARRAY_H
 #define ARRAY_H
 
+#include <assert.h>
 #include <stdlib.h>
+#include <string.h>
 
 struct array
 {
@@ -12,7 +14,6 @@ struct array
 };
 
 struct array array_create(size_t initial_capacity, size_t bytes);
-void array_init(struct array * array);
 void array_free(struct array * array);
 void array_reset(struct array * array, size_t initial_capacity, size_t bytes);
 

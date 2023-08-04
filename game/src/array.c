@@ -1,11 +1,8 @@
-#include <stdlib.h>
-#include <assert.h>
-#include <string.h>
 #include "array.h"
 
 
 
-void increase_capacity_if_needed(struct array * array);
+static void increase_capacity_if_needed(struct array * array);
 
 
 
@@ -15,17 +12,17 @@ struct array array_create(size_t initial_capacity, size_t bytes)
     assert(((initial_capacity & (initial_capacity - 1)) == 0));
     assert(bytes > 0);
 
-    struct array array = (struct array){ 0, initial_capacity, bytes, NULL };
+    struct array array = (struct array){ 0 };
+
+    void * ptr = calloc(initial_capacity, bytes);
+    assert(ptr != NULL);
+
+    array.count = 0;
+    array.capacity = initial_capacity;
+    array.bytes = bytes;
+    array.data = ptr;
 
     return array;
-}
-
-void array_init(struct array * array)
-{
-    void * data = calloc(array->capacity, array->bytes);
-    assert(data != NULL);
-
-    array->data = data;
 }
 
 void array_free(struct array * array)
@@ -40,7 +37,6 @@ void array_reset(struct array * array, size_t initial_capacity, size_t bytes)
 {
     array_free(array);
     *array = array_create(initial_capacity, bytes);
-    array_init(array);
 }
 
 
@@ -157,7 +153,7 @@ void array_shrink(struct array * array)
 
 
 
-void increase_capacity_if_needed(struct array * array)
+static void increase_capacity_if_needed(struct array * array)
 {
     if (array->count == array->capacity)
     {

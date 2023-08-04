@@ -1,9 +1,5 @@
 #include "scene_0001.h"
 
-#include "button.h"
-#include "game_data.h"
-#include "sprite.h"
-
 static struct sprite * sprite_slide_0000;
 static struct sprite * sprite_slide_0001;
 static struct sprite * sprite_slide_0002;
@@ -22,7 +18,7 @@ static struct sprite * slides[7];
 
 static size_t current_slide_index;
 
-void scene_0001_load   (struct scene * scene)
+void scene_0001_load(struct scene * scene)
 {
     scene_add_sprite(scene, "slide_0", "resources/scene_0001/slide_0.png", 0, 0, WHITE, true);
     scene_add_sprite(scene, "slide_1", "resources/scene_0001/slide_1.png", 0, 0, WHITE, false);
@@ -34,12 +30,12 @@ void scene_0001_load   (struct scene * scene)
 
     scene_add_button(scene, "quit", 0, 0, 544, 332, BLANK, true, 1, NULL, NULL, on_released_button_quit);
 }
-void scene_0001_unload (struct scene * scene)
+void scene_0001_unload(struct scene * scene)
 {
 
 }
 
-void scene_0001_enter  (struct scene * scene)
+void scene_0001_enter(struct scene * scene)
 {
     sprite_slide_0000 = scene_get_sprite_from_name(scene, "slide_0");
     sprite_slide_0001 = scene_get_sprite_from_name(scene, "slide_1");
@@ -66,12 +62,12 @@ void scene_0001_enter  (struct scene * scene)
 
     current_slide_index = 0;
 }
-void scene_0001_exit   (struct scene * scene)
+void scene_0001_exit(struct scene * scene)
 {
 
 }
 
-void scene_0001_update (struct scene * scene, float delta)
+void scene_0001_update(struct scene * scene, float delta)
 {
     if (current_slide_index < slides_count)
     {
@@ -85,12 +81,12 @@ void scene_0001_update (struct scene * scene, float delta)
         }
     }
 }
-void scene_0001_draw   (struct scene * scene)
+void scene_0001_draw(struct scene * scene)
 {
 
 }
 
-static void on_released_button_quit (void)
+static void on_released_button_quit(void)
 {
 
 }

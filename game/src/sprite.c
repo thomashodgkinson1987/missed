@@ -1,9 +1,5 @@
 #include "sprite.h"
 
-#include <assert.h>
-#include <stdlib.h>
-#include <string.h>
-
 
 
 struct sprite sprite_create(char * texture_filename, int x, int y, Color tint, bool is_visible)

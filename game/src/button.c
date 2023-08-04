@@ -2,11 +2,11 @@
 
 
 
-struct button button_create(int x, int y, int width, int height, Color color, bool is_enabled, int mouse_cursor_index,
-    void(*on_pressed)(void), void(*on_down)(void), void(*on_released)(void))
+struct button button_create(int x, int y, int width, int height, Color color, bool is_enabled, int mouse_cursor_index, void(*on_pressed)(void), void(*on_down)(void), void(*on_released)(void))
 {
     return (struct button) { x, y, width, height, color, is_enabled, mouse_cursor_index, false, false, false, false, on_pressed, on_down, on_released };
 }
+
 void button_free(struct button * button)
 {
     button->x = 0;
@@ -24,8 +24,8 @@ void button_free(struct button * button)
     button->on_down = NULL;
     button->on_released = NULL;
 }
-void button_reset(struct button * button, int x, int y, int width, int height, Color color, bool is_enabled, int mouse_cursor_index,
-    void(*on_pressed)(void), void(*on_down)(void), void(*on_released)(void))
+
+void button_reset(struct button * button, int x, int y, int width, int height, Color color, bool is_enabled, int mouse_cursor_index, void(*on_pressed)(void), void(*on_down)(void), void(*on_released)(void))
 {
     button_free(button);
     *button = button_create(x, y, width, height, color, is_enabled, mouse_cursor_index, on_pressed, on_down, on_released);
