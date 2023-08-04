@@ -11,6 +11,10 @@ struct scene
 {
     int id;
     char * name;
+    int x;
+    int y;
+    bool is_update;
+    bool is_draw;
     float elapsed_time;
     struct array sprites;
     struct array sprite_names;
@@ -26,33 +30,25 @@ struct scene
     void(*draw)(struct scene * scene);
 };
 
-struct scene scene_create(
-    int id,
-    char * name,
-    void(*load_ptr)(struct scene * scene),
-    void(*unload_ptr)(struct scene * scene),
-    void(*enter_ptr)(struct scene * scene),
-    void(*exit_ptr)(struct scene * scene),
-    void(*update_ptr)(struct scene * scene, float delta),
-    void(*draw_ptr)(struct scene * scene));
+struct scene scene_create(int id, char * name, int x, int y, bool is_update, bool is_draw, void(*load_ptr)(struct scene * scene), void(*unload_ptr)(struct scene * scene), void(*enter_ptr)(struct scene * scene), void(*exit_ptr)(struct scene * scene), void(*update_ptr)(struct scene * scene, float delta), void(*draw_ptr)(struct scene * scene));
 void scene_free(struct scene * scene);
-void scene_reset(
-    struct scene * scene,
-    int id,
-    char * name,
-    void(*load_ptr)(struct scene * scene),
-    void(*unload_ptr)(struct scene * scene),
-    void(*enter_ptr)(struct scene * scene),
-    void(*exit_ptr)(struct scene * scene),
-    void(*update_ptr)(struct scene * scene, float delta),
-    void(*draw_ptr)(struct scene * scene));
+void scene_reset(struct scene * scene, int id, char * name, int x, int y, bool is_update, bool is_draw, void(*load_ptr)(struct scene * scene), void(*unload_ptr)(struct scene * scene), void(*enter_ptr)(struct scene * scene), void(*exit_ptr)(struct scene * scene), void(*update_ptr)(struct scene * scene, float delta), void(*draw_ptr)(struct scene * scene));
 
 int scene_get_id(struct scene * scene);
 char * scene_get_name(struct scene * scene);
+int scene_get_x(struct scene * scene);
+int scene_get_y(struct scene * scene);
+bool scene_get_is_update(struct scene * scene);
+bool scene_get_is_draw(struct scene * scene);
 float scene_get_elapsed_time(struct scene * scene);
 
 void scene_set_id(struct scene * scene, int id);
 void scene_set_name(struct scene * scene, char * name);
+void scene_set_x(struct scene * scene, int x);
+void scene_set_y(struct scene * scene, int x);
+void scene_set_position(struct scene * scene, int x, int y);
+void scene_set_is_update(struct scene * scene, bool is_update);
+void scene_set_is_draw(struct scene * scene, bool is_draw);
 void scene_set_elapsed_time(struct scene * scene, float elapsed_time);
 
 void scene_translate_elapsed_time(struct scene * scene, float delapsed_time);

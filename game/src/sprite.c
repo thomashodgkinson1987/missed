@@ -103,3 +103,11 @@ void sprite_draw(struct sprite * sprite)
         DrawTexture(sprite->texture, sprite->x, sprite->y, sprite->tint);
     }
 }
+
+void sprite_draw_with_offset(struct sprite * sprite, int offset_x, int offset_y)
+{
+    if (sprite->is_visible)
+    {
+        DrawTexture(sprite->texture, offset_x + sprite->x, offset_y + sprite->y, sprite->tint);
+    }
+}

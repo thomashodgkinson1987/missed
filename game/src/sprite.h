@@ -31,5 +31,6 @@ void sprite_set_is_visible(struct sprite * sprite, bool is_visible);
 void sprite_toggle_is_visible(struct sprite * sprite);
 
 void sprite_draw(struct sprite * sprite);
+void sprite_draw_with_offset(struct sprite * sprite, int offset_x, int offset_y);
 
 #endif

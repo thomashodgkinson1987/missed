@@ -69,6 +69,18 @@ void scene_0001_exit(struct scene * scene)
 
 void scene_0001_update(struct scene * scene, float delta)
 {
+    if (IsKeyPressed(KEY_H))
+        scene_set_is_draw(scene, !scene_get_is_draw(scene));
+
+    if (IsKeyDown(KEY_KP_4))
+        scene_set_x(scene, scene_get_x(scene) - 8);
+    if (IsKeyDown(KEY_KP_6))
+        scene_set_x(scene, scene_get_x(scene) + 8);
+    if (IsKeyDown(KEY_KP_8))
+        scene_set_y(scene, scene_get_y(scene) - 8);
+    if (IsKeyDown(KEY_KP_2))
+        scene_set_y(scene, scene_get_y(scene) + 8);
+
     if (current_slide_index < slides_count)
     {
         slide_timer += delta;

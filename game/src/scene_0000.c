@@ -49,6 +49,18 @@ void scene_0000_exit(struct scene * scene)
 
 void scene_0000_update(struct scene * scene, float delta)
 {
+    if (IsKeyPressed(KEY_G))
+        scene_set_is_draw(scene, !scene_get_is_draw(scene));
+
+    if (IsKeyDown(KEY_LEFT))
+        scene_set_x(scene, scene_get_x(scene) - 8);
+    if (IsKeyDown(KEY_RIGHT))
+        scene_set_x(scene, scene_get_x(scene) + 8);
+    if (IsKeyDown(KEY_UP))
+        scene_set_y(scene, scene_get_y(scene) - 8);
+    if (IsKeyDown(KEY_DOWN))
+        scene_set_y(scene, scene_get_y(scene) + 8);
+
     sprite_set_is_visible(sprite_new_game_over, button_get_is_mouse_over(button_new_game));
     sprite_set_is_visible(sprite_load_game_over, button_get_is_mouse_over(button_load_game));
     sprite_set_is_visible(sprite_quit_over, button_get_is_mouse_over(button_quit));

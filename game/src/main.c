@@ -15,19 +15,6 @@
 
 
 
-enum scene_transision_enum
-{
-    SCENE_TRANSITION_IDLE,
-    SCENE_TRANSITION_START,
-    SCENE_TRANSITION_FADE_OUT,
-    SCENE_TRANSITION_RUN,
-    SCENE_TRANSITION_WAIT,
-    SCENE_TRANSITION_FADE_IN,
-    SCENE_TRANSITION_END
-};
-
-
-
 bool exit_window;
 
 struct game_data game_data;
@@ -42,21 +29,8 @@ Vector2 mouse_cursor_offsets[5];
 
 int current_mouse_cursor_index;
 
-int current_scene_index;
-int next_scene_index;
-
-bool is_scene_transition;
-enum scene_transision_enum scene_transition_state;
-float scene_transition_fade_out_time;
-float scene_transition_wait_time;
-float scene_transition_fade_in_time;
-float scene_transition_timer;
-Color scene_transition_color;
-
-bool is_draw_debug;
-
 struct array scenes;
-struct scene * current_scene;
+struct array active_scenes;
 
 RenderTexture2D render_texture;
 
@@ -69,21 +43,14 @@ void game_free(void);
 void game_reset(void);
 
 void game_update(float delta);
-void game_update_scene_transition(float delta);
-void game_update_scene(float delta);
+void game_update_scene(struct scene * scene, float delta);
 
 void game_draw(void);
-void game_draw_scene(void);
+void game_draw_scene(struct scene * scene);
 void game_draw_mouse(void);
-void game_draw_scene_transition(void);
-void game_draw_debug(void);
 void game_draw_render_texture(void);
 
-void add_scene(int id, char * name, void(*scene_load)(struct scene * scene), void(*scene_unload)(struct scene * scene), void(*scene_enter)(struct scene * scene), void(*scene_exit)(struct scene * scene), void(*scene_update)(struct scene * scene, float delta), void(*scene_draw)(struct scene * scene));
-
-void set_scene_from_index(int index);
-void set_scene_from_id(int id);
-void set_scene_from_name(char * name);
+void add_scene(int id, char * name, int x, int y, bool is_update, bool is_draw, void(*scene_load)(struct scene * scene), void(*scene_unload)(struct scene * scene), void(*scene_enter)(struct scene * scene), void(*scene_exit)(struct scene * scene), void(*scene_update)(struct scene * scene, float delta), void(*scene_draw)(struct scene * scene));
 
 
 
@@ -147,25 +114,19 @@ void game_init(void)
 
     current_mouse_cursor_index = 1;
 
-    current_scene_index = -1;
-    next_scene_index = 1;
+    scenes = array_create(2, sizeof(struct scene));
+    active_scenes = array_create(2, sizeof(struct scene *));
 
-    is_scene_transition = true;
-    scene_transition_state = SCENE_TRANSITION_RUN;
-    scene_transition_fade_out_time = 0.5f;
-    scene_transition_wait_time = 0.5f;
-    scene_transition_fade_in_time = 0.5f;
-    scene_transition_timer = 0.0f;
-    scene_transition_color = BLACK;
+    add_scene(0, "scene_0000", 0, 0, true, true, scene_0000_load, scene_0000_unload, scene_0000_enter, scene_0000_exit, scene_0000_update, scene_0000_draw);
+    add_scene(1, "scene_0001", 0, 0, false, true, scene_0001_load, scene_0001_unload, scene_0001_enter, scene_0001_exit, scene_0001_update, scene_0001_draw);
 
-    scenes = array_create(1, sizeof(struct scene));
-
-    add_scene(0, "scene_0000", scene_0000_load, scene_0000_unload, scene_0000_enter, scene_0000_exit, scene_0000_update, scene_0000_draw);
-    add_scene(1, "scene_0001", scene_0001_load, scene_0001_unload, scene_0001_enter, scene_0001_exit, scene_0001_update, scene_0001_draw);
-
-    current_scene = NULL;
-
-    is_draw_debug = false;
+    for (int i = array_get_count(&scenes) - 1; i >= 0; --i)
+    {
+        struct scene * scene = (struct scene *)array_get(&scenes, i);
+        scene_load(scene);
+        scene_enter(scene);
+        array_append(&active_scenes, &scene);
+    }
 
     render_texture = LoadRenderTexture(544, 332);
 
@@ -175,11 +136,17 @@ void game_free(void)
 {
     printf("game_free\n");
 
-    if (current_scene != NULL)
+    array_free(&active_scenes);
+
+    for (int i = 0; i < array_get_count(&scenes); ++i)
     {
-        scene_exit(current_scene);
-        scene_unload(current_scene);
+        struct scene * scene = (struct scene *)array_get(&scenes, i);
+        scene_exit(scene);
+        scene_unload(scene);
+        scene_free(scene);
     }
+
+    array_free(&scenes);
 
     game_data_free(&game_data);
     game_data = (struct game_data){ 0 };
@@ -196,27 +163,6 @@ void game_free(void)
     }
 
     current_mouse_cursor_index = -1;
-
-    current_scene_index = -1;
-    next_scene_index = -1;
-
-    is_scene_transition = false;
-    scene_transition_state = SCENE_TRANSITION_IDLE;
-    scene_transition_fade_out_time = 0.0f;
-    scene_transition_wait_time = 0.0f;
-    scene_transition_fade_in_time = 0.0f;
-    scene_transition_timer = 0.0f;
-    scene_transition_color = BLANK;
-
-    for (int i = 0; i < array_get_count(&scenes); ++i)
-    {
-        struct scene * scene = (struct scene *)array_get(&scenes, i);
-        scene_free(scene);
-    }
-
-    current_scene = NULL;
-
-    is_draw_debug = false;
 
     UnloadRenderTexture(render_texture);
 
@@ -238,94 +184,19 @@ void game_update(float delta)
     {
         game_reset();
     }
-    if (IsKeyPressed(KEY_D))
-    {
-        is_draw_debug = !is_draw_debug;
-    }
 
-    if (is_scene_transition)
+    for (int i = 0; i < array_get_count(&active_scenes); ++i)
     {
-        game_update_scene_transition(delta);
-    }
-
-    if (current_scene != NULL)
-    {
-        game_update_scene(delta);
+        struct scene * scene = *(struct scene **)array_get(&active_scenes, i);
+        if (scene_get_is_update(scene))
+        {
+            game_update_scene(scene, delta);
+        }
     }
 }
-void game_update_scene_transition(float delta)
+void game_update_scene(struct scene * scene, float delta)
 {
-    if (scene_transition_state == SCENE_TRANSITION_START)
-    {
-        scene_transition_timer = 0.0f;
-        scene_transition_color.a = 0;
-        scene_transition_state = SCENE_TRANSITION_FADE_OUT;
-    }
-    if (scene_transition_state == SCENE_TRANSITION_FADE_OUT)
-    {
-        scene_transition_timer += delta;
-        if (scene_transition_timer < scene_transition_fade_out_time)
-        {
-            scene_transition_color.a = (unsigned char)(255 * (scene_transition_timer / scene_transition_fade_out_time));
-        }
-        else
-        {
-            scene_transition_color.a = 255;
-            scene_transition_timer = 0.0f;
-            scene_transition_state = SCENE_TRANSITION_RUN;
-        }
-    }
-    if (scene_transition_state == SCENE_TRANSITION_RUN)
-    {
-        if (current_scene != NULL)
-        {
-            scene_exit(current_scene);
-            scene_unload(current_scene);
-            current_scene = NULL;
-        }
-        current_scene_index = next_scene_index;
-        next_scene_index = -1;
-        if (current_scene_index != -1)
-        {
-            current_scene = (struct scene *)array_get(&scenes, current_scene_index);
-            scene_load(current_scene);
-            scene_enter(current_scene);
-        }
-        scene_transition_state = SCENE_TRANSITION_WAIT;
-    }
-    if (scene_transition_state == SCENE_TRANSITION_WAIT)
-    {
-        scene_transition_timer += delta;
-        if (scene_transition_timer >= scene_transition_wait_time)
-        {
-            scene_transition_timer = 0.0f;
-            scene_transition_state = SCENE_TRANSITION_FADE_IN;
-        }
-    }
-    if (scene_transition_state == SCENE_TRANSITION_FADE_IN)
-    {
-        scene_transition_timer += delta;
-        if (scene_transition_timer < scene_transition_fade_in_time)
-        {
-            scene_transition_color.a = (unsigned char)(255 * (1.0f - (scene_transition_timer / scene_transition_fade_in_time)));
-        }
-        else
-        {
-            scene_transition_color.a = 0;
-            scene_transition_timer = 0.0f;
-            scene_transition_state = SCENE_TRANSITION_END;
-        }
-    }
-    if (scene_transition_state == SCENE_TRANSITION_END)
-    {
-        is_enabled_mouse = true;
-        is_scene_transition = false;
-        scene_transition_state = SCENE_TRANSITION_IDLE;
-    }
-}
-void game_update_scene(float delta)
-{
-    scene_translate_elapsed_time(current_scene, delta);
+    scene_translate_elapsed_time(scene, delta);
 
     current_mouse_cursor_index = 1;
 
@@ -335,9 +206,9 @@ void game_update_scene(float delta)
 
         struct button * ptr = NULL;
 
-        for (int i = 0; i < scene_get_buttons_count(current_scene); ++i)
+        for (int i = 0; i < scene_get_buttons_count(scene); ++i)
         {
-            struct button * button = scene_get_button_from_index(current_scene, i);
+            struct button * button = scene_get_button_from_index(scene, i);
 
             if (!button_get_is_enabled(button))
             {
@@ -356,8 +227,8 @@ void game_update_scene(float delta)
 
             if (ptr == NULL)
             {
-                int x = button_get_x(button);
-                int y = button_get_y(button);
+                int x = scene_get_x(scene) + button_get_x(button);
+                int y = scene_get_y(scene) + button_get_y(button);
                 int width = button_get_width(button);
                 int height = button_get_height(button);
 
@@ -403,7 +274,7 @@ void game_update_scene(float delta)
         }
     }
 
-    scene_update(current_scene, delta);
+    scene_update(scene, delta);
 }
 
 void game_draw(void)
@@ -412,24 +283,18 @@ void game_draw(void)
 
     ClearBackground((Color) { 255, 0, 255, 255 });
 
-    if (current_scene != NULL)
+    for (int i = 0; i < array_get_count(&active_scenes); ++i)
     {
-        game_draw_scene();
+        struct scene * scene = *(struct scene **)array_get(&active_scenes, i);
+        if (scene_get_is_draw(scene))
+        {
+            game_draw_scene(scene);
+        }
     }
 
     if (is_draw_mouse)
     {
         game_draw_mouse();
-    }
-
-    if (is_scene_transition)
-    {
-        game_draw_scene_transition();
-    }
-
-    if (is_draw_debug)
-    {
-        game_draw_debug();
     }
 
     EndTextureMode();
@@ -442,9 +307,9 @@ void game_draw(void)
 
     EndDrawing();
 }
-void game_draw_scene(void)
+void game_draw_scene(struct scene * scene)
 {
-    scene_draw(current_scene);
+    scene_draw(scene);
 }
 void game_draw_mouse(void)
 {
@@ -452,15 +317,6 @@ void game_draw_mouse(void)
     mouse_position.x += mouse_cursor_offsets[current_mouse_cursor_index].x;
     mouse_position.y += mouse_cursor_offsets[current_mouse_cursor_index].y;
     DrawTexture(mouse_cursor_textures[current_mouse_cursor_index], (int)mouse_position.x, (int)mouse_position.y, WHITE);
-}
-void game_draw_scene_transition(void)
-{
-    DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), scene_transition_color);
-}
-void game_draw_debug(void)
-{
-    DrawRectangle(0, 0, 138, 26, BLACK);
-    DrawText(TextFormat("current_scene_index: %d", current_scene_index), 8, 8, 8, WHITE);
 }
 void game_draw_render_texture(void)
 {
@@ -470,42 +326,8 @@ void game_draw_render_texture(void)
     DrawTexturePro(render_texture.texture, source, dest, (Vector2) { 0.0f, 0.0f }, 0.0f, WHITE);
 }
 
-void add_scene(int id, char * name, void(*scene_load)(struct scene * scene), void(*scene_unload)(struct scene * scene), void(*scene_enter)(struct scene * scene), void(*scene_exit)(struct scene * scene), void(*scene_update)(struct scene * scene, float delta), void(*scene_draw)(struct scene * scene))
+void add_scene(int id, char * name, int x, int y, bool is_update, bool is_draw, void(*scene_load)(struct scene * scene), void(*scene_unload)(struct scene * scene), void(*scene_enter)(struct scene * scene), void(*scene_exit)(struct scene * scene), void(*scene_update)(struct scene * scene, float delta), void(*scene_draw)(struct scene * scene))
 {
-    struct scene scene = scene_create(id, name, scene_load, scene_unload, scene_enter, scene_exit, scene_update, scene_draw);
+    struct scene scene = scene_create(id, name, x, y, is_update, is_draw, scene_load, scene_unload, scene_enter, scene_exit, scene_update, scene_draw);
     array_append(&scenes, &scene);
-}
-
-void set_scene_from_index(int index)
-{
-    printf("set_scene_from_index: index=%d\n", index);
-
-    is_enabled_mouse = false;
-    next_scene_index = index;
-    is_scene_transition = true;
-    scene_transition_state = SCENE_TRANSITION_START;
-}
-void set_scene_from_id(int id)
-{
-    for (int i = 0; i < array_get_count(&scenes); ++i)
-    {
-        struct scene * scene = (struct scene *)array_get(&scenes, i);
-        if (scene_get_id(scene) == id)
-        {
-            set_scene_from_index(i);
-            break;
-        }
-    }
-}
-void set_scene_from_name(char * name)
-{
-    for (int i = 0; i < array_get_count(&scenes); ++i)
-    {
-        struct scene * scene = (struct scene *)array_get(&scenes, i);
-        if (strcmp(scene_get_name(scene), name) == 0)
-        {
-            set_scene_from_index(i);
-            break;
-        }
-    }
 }

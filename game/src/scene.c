@@ -6,7 +6,7 @@
 
 
 
-struct scene scene_create(int id, char * name, void(*load_ptr)(struct scene * scene), void(*unload_ptr)(struct scene * scene), void(*enter_ptr)(struct scene * scene), void(*exit_ptr)(struct scene * scene), void(*update_ptr)(struct scene * scene, float delta), void(*draw_ptr)(struct scene * scene))
+struct scene scene_create(int id, char * name, int x, int y, bool is_update, bool is_draw, void(*load_ptr)(struct scene * scene), void(*unload_ptr)(struct scene * scene), void(*enter_ptr)(struct scene * scene), void(*exit_ptr)(struct scene * scene), void(*update_ptr)(struct scene * scene, float delta), void(*draw_ptr)(struct scene * scene))
 {
     struct scene scene = (struct scene){ 0 };
 
@@ -16,6 +16,12 @@ struct scene scene_create(int id, char * name, void(*load_ptr)(struct scene * sc
     assert(ptr != NULL);
     strcpy(ptr, name);
     scene.name = ptr;
+
+    scene.x = x;
+    scene.y = y;
+
+    scene.is_update = is_update;
+    scene.is_draw = is_draw;
 
     scene.elapsed_time = 0.0f;
 
@@ -42,6 +48,12 @@ void scene_free(struct scene * scene)
 
     free(scene->name);
     scene->name = NULL;
+
+    scene->x = 0;
+    scene->y = 0;
+
+    scene->is_update = false;
+    scene->is_draw = false;
 
     scene->elapsed_time = 0.0f;
 
@@ -101,10 +113,10 @@ void scene_free(struct scene * scene)
     scene->draw = NULL;
 }
 
-void scene_reset(struct scene * scene, int id, char * name, void(*load_ptr)(struct scene * scene), void(*unload_ptr)(struct scene * scene), void(*enter_ptr)(struct scene * scene), void(*exit_ptr)(struct scene * scene), void(*update_ptr)(struct scene * scene, float delta), void(*draw_ptr)(struct scene * scene))
+void scene_reset(struct scene * scene, int id, char * name, int x, int y, bool is_update, bool is_draw, void(*load_ptr)(struct scene * scene), void(*unload_ptr)(struct scene * scene), void(*enter_ptr)(struct scene * scene), void(*exit_ptr)(struct scene * scene), void(*update_ptr)(struct scene * scene, float delta), void(*draw_ptr)(struct scene * scene))
 {
     scene_free(scene);
-    *scene = scene_create(id, name, load_ptr, unload_ptr, enter_ptr, exit_ptr, update_ptr, draw_ptr);
+    *scene = scene_create(id, name, x, y, is_update, is_draw, load_ptr, unload_ptr, enter_ptr, exit_ptr, update_ptr, draw_ptr);
 }
 
 
@@ -117,6 +129,26 @@ int scene_get_id(struct scene * scene)
 char * scene_get_name(struct scene * scene)
 {
     return scene->name;
+}
+
+int scene_get_x(struct scene * scene)
+{
+    return scene->x;
+}
+
+int scene_get_y(struct scene * scene)
+{
+    return scene->y;
+}
+
+bool scene_get_is_update(struct scene * scene)
+{
+    return scene->is_update;
+}
+
+bool scene_get_is_draw(struct scene * scene)
+{
+    return scene->is_draw;
 }
 
 float scene_get_elapsed_time(struct scene * scene)
@@ -137,6 +169,32 @@ void scene_set_name(struct scene * scene, char * name)
     assert(ptr != NULL);
     strcpy(ptr, name);
     scene->name = ptr;
+}
+
+void scene_set_x(struct scene * scene, int x)
+{
+    scene->x = x;
+}
+
+void scene_set_y(struct scene * scene, int y)
+{
+    scene->y = y;
+}
+
+void scene_set_position(struct scene * scene, int x, int y)
+{
+    scene->x = x;
+    scene->y = y;
+}
+
+void scene_set_is_update(struct scene * scene, bool is_update)
+{
+    scene->is_update = is_update;
+}
+
+void scene_set_is_draw(struct scene * scene, bool is_draw)
+{
+    scene->is_draw = is_draw;
 }
 
 void scene_set_elapsed_time(struct scene * scene, float elapsed_time)
@@ -342,13 +400,13 @@ void scene_draw(struct scene * scene)
     for (int i = 0; i < scene_get_sprites_count(scene); ++i)
     {
         struct sprite * sprite = scene_get_sprite_from_index(scene, i);
-        sprite_draw(sprite);
+        sprite_draw_with_offset(sprite, scene_get_x(scene), scene_get_y(scene));
     }
 
     for (int i = 0; i < scene_get_buttons_count(scene); ++i)
     {
         struct button * button = scene_get_button_from_index(scene, i);
-        DrawRectangle(button_get_x(button), button_get_y(button), button_get_width(button), button_get_height(button), button_get_color(button));
+        DrawRectangle(scene_get_x(scene) + button_get_x(button), scene_get_y(scene) + button_get_y(button), button_get_width(button), button_get_height(button), button_get_color(button));
     }
 
     scene->draw(scene);
