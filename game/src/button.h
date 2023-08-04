@@ -1,7 +1,6 @@
 #ifndef BUTTON_H
 #define BUTTON_H
 
-#include <stdbool.h>
 #include "raylib.h"
 
 struct button
@@ -23,6 +22,9 @@ struct button
 };
 
 struct button button_create(int x, int y, int width, int height, Color color, bool is_enabled, int mouse_cursor_index,
+    void(*on_pressed)(void), void(*on_down)(void), void(*on_released)(void));
+void button_free(struct button * button);
+void button_reset(struct button * button, int x, int y, int width, int height, Color color, bool is_enabled, int mouse_cursor_index,
     void(*on_pressed)(void), void(*on_down)(void), void(*on_released)(void));
 
 int button_get_x(struct button * button);
